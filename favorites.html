@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Furniture | Избранное</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="common.css">
+    <style>
+        /* Специфичные стили для страницы избранного */
+        .favorites-header {
+            margin-bottom: 40px;
+        }
+        
+        .favorites-content {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 40px;
+        }
+        
+        .favorites-items {
+            background-color: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        
+        .favorite-item {
+            display: grid;
+            grid-template-columns: 120px 1fr 150px 150px;
+            gap: 20px;
+            padding: 25px;
+            border-bottom: 1px solid var(--gray);
+            align-items: center;
+        }
+        
+        .favorite-item:last-child {
+            border-bottom: none;
+        }
+        
+        .favorite-item-image {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: var(--radius);
+            transition: var(--transition);
+        }
+        
+        .favorite-item-image:hover {
+            transform: scale(1.05);
+        }
+        
+        .favorite-item-info {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .favorite-item-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .favorite-item-name a {
+            color: inherit;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .favorite-item-name a:hover {
+            color: var(--accent);
+        }
+        
+        .favorite-item-category {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+        
+        .favorite-item-stock {
+            font-size: 0.9rem;
+            padding: 4px 10px;
+            border-radius: 15px;
+            display: inline-block;
+            width: fit-content;
+        }
+        
+        .favorite-item-stock.in-stock {
+            background-color: rgba(56, 161, 105, 0.1);
+            color: var(--success);
+        }
+        
+        .favorite-item-stock.out-of-stock {
+            background-color: rgba(229, 62, 62, 0.1);
+            color: #e53e3e;
+        }
+        
+        .favorite-item-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .favorite-item-original-price {
+            font-size: 1rem;
+            color: var(--text-light);
+            text-decoration: line-through;
+            margin-right: 8px;
+        }
+        
+        .favorite-item-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .favorite-item-actions .btn {
+            width: 100%;
+            padding: 12px;
+            justify-content: center;
+        }
+        
+        .remove-favorite-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: var(--radius);
+            border: 2px solid var(--gray);
+            background-color: white;
+            color: var(--text);
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+        
+        .remove-favorite-btn:hover {
+            background-color: #fed7d7;
+            border-color: #e53e3e;
+            color: #e53e3e;
+        }
+        
+        .favorites-sidebar {
+            background-color: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 30px;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+        
+        .sidebar-title {
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+            color: var(--primary);
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--gray);
+        }
+        
+        .favorites-stats {
+            margin-bottom: 30px;
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+        
+        .stat-item.total {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid var(--gray);
+        }
+        
+        .favorites-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .favorites-actions .btn {
+            width: 100%;
+            padding: 14px;
+            justify-content: center;
+        }
+        
+        .empty-favorites {
+            text-align: center;
+            padding: 60px 20px;
+            background-color: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            grid-column: 1 / -1;
+        }
+        
+        .empty-favorites i {
+            font-size: 4rem;
+            color: var(--gray);
+            margin-bottom: 20px;
+        }
+        
+        .empty-favorites h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .empty-favorites p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            max-width: 500px;
+            margin: 0 auto 30px;
+        }
+        
+        .favorites-actions-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--gray);
+        }
+        
+        .clear-favorites-btn {
+            background: none;
+            border: none;
+            color: var(--danger);
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+        
+        .clear-favorites-btn:hover {
+            background-color: rgba(229, 62, 62, 0.1);
+        }
+        
+        .continue-shopping {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .continue-shopping:hover {
+            gap: 15px;
+        }
+        
+        .favorite-item-mobile {
+            display: none;
+        }
+        
+        /* Бейджи товара */
+        .favorite-item-badges {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .favorite-item-badge {
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .favorite-item-badge.new {
+            background-color: var(--success);
+        }
+        
+        .favorite-item-badge.sale {
+            background-color: #e53e3e;
+        }
+        
+        .favorite-item-badge.popular {
+            background-color: var(--accent);
+        }
+        
+        @media (max-width: 992px) {
+            .favorites-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .favorites-sidebar {
+                position: static;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .favorite-item {
+                grid-template-columns: 100px 1fr;
+                grid-template-rows: auto auto auto;
+                gap: 15px;
+                padding: 20px;
+                position: relative;
+            }
+            
+            .favorite-item-image {
+                grid-row: 1 / 4;
+                width: 100px;
+                height: 100px;
+            }
+            
+            .favorite-item-info {
+                grid-column: 2 / 3;
+                grid-row: 1 / 2;
+            }
+            
+            .favorite-item-price {
+                grid-column: 2 / 3;
+                grid-row: 2 / 3;
+                font-size: 1.1rem;
+            }
+            
+            .favorite-item-actions {
+                grid-column: 1 / 3;
+                grid-row: 3 / 4;
+                flex-direction: row;
+            }
+            
+            .favorite-item-desktop {
+                display: none;
+            }
+            
+            .favorite-item-mobile {
+                display: block;
+            }
+            
+            .favorites-actions-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .favorite-item {
+                grid-template-columns: 80px 1fr;
+                padding: 15px;
+            }
+            
+            .favorite-item-image {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .favorite-item-actions {
+                flex-direction: column;
+            }
+        }
+        
+        /* Анимация удаления товара */
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: scale(1);
+            }
+            to {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+        }
+        
+        .favorite-item.removing {
+            animation: fadeOut 0.3s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header>
+        <div class="container header-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-couch"></i>
+                <span>Nexus Furniture</span>
+            </a>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <nav id="mainNav">
+                <a href="index.html" class="nav-link">Главная</a>
+                <a href="catalog.html" class="nav-link">Каталог</a>
+                <a href="about.html" class="nav-link">О нас</a>
+                <a href="contacts.html" class="nav-link">Контакты</a>
+                <a href="delivery.html" class="nav-link">Доставка</a>
+            </nav>
+            
+            <div class="header-actions">
+                <a href="favorites.html" class="icon-btn active">
+                    <i class="fas fa-heart"></i>
+                    <span class="badge" id="favoritesCount">0</span>
+                </a>
+                <a href="cart.html" class="icon-btn">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="badge" id="cartCount">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Основной контент -->
+    <main class="container page-content">
+        <!-- Заголовок избранного -->
+        <div class="favorites-header">
+            <h1 class="section-title">Избранное</h1>
+            <p>Здесь собраны товары, которые вам понравились</p>
+        </div>
+        
+        <!-- Контент избранного -->
+        <div class="favorites-content" id="favoritesContent">
+            <!-- Список товаров будет загружен через JavaScript -->
+        </div>
+        
+        <!-- Пустое избранное (скрыто по умолчанию) -->
+        <div class="empty-favorites" id="emptyFavorites" style="display: none;">
+            <i class="fas fa-heart"></i>
+            <h3>Ваше избранное пусто</h3>
+            <p>Добавляйте товары в избранное, чтобы не потерять их и быстро вернуться к ним позже</p>
+            <a href="catalog.html" class="btn">
+                <i class="fas fa-shopping-bag"></i> Перейти в каталог
+            </a>
+        </div>
+    </main>
+
+    <!-- Подвал сайта -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Nexus Furniture</h3>
+                    <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 20px; line-height: 1.7;">Современная мебель для вашего дома и офиса. Качество, дизайн и комфорт в каждом изделии.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-vk"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-telegram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Навигация</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html"><i class="fas fa-home"></i> Главная</a></li>
+                        <li><a href="catalog.html"><i class="fas fa-th-large"></i> Каталог</a></li>
+                        <li><a href="about.html"><i class="fas fa-info-circle"></i> О нас</a></li>
+                        <li><a href="contacts.html"><i class="fas fa-address-book"></i> Контакты</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Помощь</h3>
+                    <ul class="footer-links">
+                        <li><a href="delivery.html"><i class="fas fa-truck"></i> Доставка</a></li>
+                        <li><a href="delivery.html"><i class="fas fa-credit-card"></i> Оплата</a></li>
+                        <li><a href="contacts.html"><i class="fas fa-exchange-alt"></i> Возврат</a></li>
+                        <li><a href="contacts.html"><i class="fas fa-shield-alt"></i> Гарантия</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Контакты</h3>
+                    <ul class="footer-links">
+                        <li><a href="tel:+74951234567"><i class="fas fa-phone"></i> +7 (495) 123-45-67</a></li>
+                        <li><a href="mailto:info@nexus-furniture.ru"><i class="fas fa-envelope"></i> info@nexus-furniture.ru</a></li>
+                        <li><i class="fas fa-map-marker-alt"></i> Москва, ул. Дизайнеров, д. 15</li>
+                        <li><i class="fas fa-clock"></i> Пн-Пт: 9:00-21:00, Сб-Вс: 10:00-20:00</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2023 Nexus Furniture. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Подключаем общий файл JavaScript -->
+    <script src="common.js"></script>
+    
+    <script>
+        // Используем те же данные о товарах, что и в корзине
+        const allProductsData = [
+            ...productsData, // Базовые товары из common.js
+            
+            // Добавляем товары из каталога
+            {
+                id: 9,
+                name: 'Диван угловой "Семейный"',
+                category: 'sofas',
+                price: 64990,
+                originalPrice: 72990,
+                image: 'https://images.unsplash.com/photo-1549187774-b4e9b0445b41?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                badges: ['sale', 'popular'],
+                inStock: true
+            },
+            {
+                id: 10,
+                name: 'Кресло-качалка "Ретро"',
+                category: 'chairs',
+                price: 14990,
+                image: 'https://images.unsplash.com/photo-1581539250439-c96689b516dd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                badges: ['new'],
+                inStock: true
+            },
+            {
+                id: 11,
+                name: 'Журнальный стол со стеклом',
+                category: 'tables',
+                price: 18990,
+                originalPrice: 21990,
+                image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                badges: ['sale'],
+                inStock: false
+            },
+            {
+                id: 12,
+                name: 'Детская кровать "Радуга"',
+                category: 'beds',
+                price: 32990,
+                image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                badges: ['new'],
+                inStock: true
+            },
+            {
+                id: 13,
+                name: 'Книжный шкаф 5-полочный',
+                category: 'wardrobes',
+                price: 24990,
+                image: 'https://images.unsplash.com/photo-1597074866923-dc0589150358?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                badges: ['popular'],
+                inStock: true
+            },
+            {
+                id: 14,
+                name: 'Навесные полки "Модерн"',
+                category: 'shelves',
+                price: 8990,
+                image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                badges: [],
+                inStock: true
+            },
+            {
+                id: 15,
+                name: 'Офисное кресло "Эргономик"',
+                category: 'chairs',
+                price: 15990,
+                originalPrice: 19990,
+                image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                badges: ['sale', 'popular'],
+                inStock: true
+            },
+            {
+                id: 16,
+                name: 'Тумба прикроватная',
+                category: 'wardrobes',
+                price: 11990,
+                image: 'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                badges: ['new'],
+                inStock: true
+            },
+            {
+                id: 17,
+                name: 'Диван-кровать "Компакт"',
+                category: 'sofas',
+                price: 28990,
+                image: 'https://images.unsplash.com/photo-1549187774-b4e9b0445b41?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                badges: [],
+                inStock: true
+            },
+            {
+                id: 18,
+                name: 'Барный стол с подсветкой',
+                category: 'tables',
+                price: 23990,
+                image: 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                badges: ['new'],
+                inStock: false
+            },
+            {
+                id: 19,
+                name: 'Шкаф для прихожей',
+                category: 'wardrobes',
+                price: 31990,
+                originalPrice: 35990,
+                image: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                badges: ['sale'],
+                inStock: true
+            },
+            {
+                id: 20,
+                name: 'Кровать с подъемным механизмом',
+                category: 'beds',
+                price: 54990,
+                image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                badges: ['popular'],
+                inStock: true
+            }
+        ];
+
+        // Данные о товарах в избранном
+        let favoriteItems = [];
+
+        // Инициализация страницы избранного
+        document.addEventListener('DOMContentLoaded', function() {
+            loadFavorites();
+            renderFavorites();
+            setupEventListeners();
+        });
+
+        // Загрузка данных избранного из localStorage
+        function loadFavorites() {
+            const favorites = StorageManager.getFavorites();
+            
+            // Сопоставляем товары из избранного с данными о товарах
+            favoriteItems = favorites.map(favoriteId => {
+                return allProductsData.find(p => p.id === favoriteId);
+            }).filter(item => item !== undefined);
+        }
+
+        // Настройка обработчиков событий
+        function setupEventListeners() {
+            // Обработчик для кнопки очистки избранного
+            const clearFavoritesBtn = document.getElementById('clearFavoritesBtn');
+            if (clearFavoritesBtn) {
+                clearFavoritesBtn.addEventListener('click', clearFavorites);
+            }
+            
+            // Обработчик для кнопки продолжения покупок
+            const continueShoppingBtn = document.getElementById('continueShoppingBtn');
+            if (continueShoppingBtn) {
+                continueShoppingBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.location.href = 'catalog.html';
+                });
+            }
+        }
+
+        // Отображение избранного
+        function renderFavorites() {
+            const favoritesContent = document.getElementById('favoritesContent');
+            const emptyFavorites = document.getElementById('emptyFavorites');
+            
+            if (favoriteItems.length === 0) {
+                // Показываем пустое избранное
+                favoritesContent.style.display = 'none';
+                emptyFavorites.style.display = 'block';
+                return;
+            }
+            
+            // Скрываем пустое избранное
+            emptyFavorites.style.display = 'none';
+            favoritesContent.style.display = 'grid';
+            
+            // Сортируем товары по дате добавления (по ID для простоты)
+            favoriteItems.sort((a, b) => a.id - b.id);
+            
+            // Генерируем HTML для товаров
+            let favoritesItemsHTML = '';
+            
+            favoriteItems.forEach(item => {
+                // Проверяем наличие товара в корзине
+                const cart = StorageManager.getCart();
+                const cartItem = cart.find(cartItem => cartItem.id === item.id);
+                const isInCart = !!cartItem;
+                const cartQuantity = cartItem ? cartItem.quantity : 0;
+                
+                // Проверяем, есть ли оригинальная цена
+                const hasOriginalPrice = item.originalPrice && item.originalPrice > item.price;
+                
+                // Бейджи товара
+                let badgesHTML = '';
+                if (item.badges && item.badges.length > 0) {
+                    badgesHTML = '<div class="favorite-item-badges">';
+                    item.badges.forEach(badge => {
+                        let badgeText = '';
+                        switch(badge) {
+                            case 'new': badgeText = 'Новинка'; break;
+                            case 'sale': badgeText = 'Скидка'; break;
+                            case 'popular': badgeText = 'Популярное'; break;
+                        }
+                        badgesHTML += `<span class="favorite-item-badge ${badge}">${badgeText}</span>`;
+                    });
+                    badgesHTML += '</div>';
+                }
+                
+                favoritesItemsHTML += `
+                    <div class="favorite-item" data-id="${item.id}">
+                        <img src="${item.image}" alt="${item.name}" class="favorite-item-image">
+                        <div class="favorite-item-info">
+                            <h3 class="favorite-item-name">
+                                <a href="javascript:void(0)" onclick="viewProduct(${item.id})">${item.name}</a>
+                            </h3>
+                            <div class="favorite-item-category">${CommonFunctions.getCategoryName(item.category)}</div>
+                            ${badgesHTML}
+                            <div class="favorite-item-mobile">
+                                <div class="favorite-item-price">
+                                    ${hasOriginalPrice ? `
+                                        <span class="favorite-item-original-price">${CommonFunctions.formatPrice(item.originalPrice)} руб.</span>
+                                    ` : ''}
+                                    ${CommonFunctions.formatPrice(item.price)} руб.
+                                </div>
+                                <div class="favorite-item-stock ${item.inStock ? 'in-stock' : 'out-of-stock'}">
+                                    ${item.inStock ? '✓ В наличии' : 'Нет в наличии'}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="favorite-item-desktop">
+                            <div class="favorite-item-price">
+                                ${hasOriginalPrice ? `
+                                    <span class="favorite-item-original-price">${CommonFunctions.formatPrice(item.originalPrice)} руб.</span>
+                                ` : ''}
+                                ${CommonFunctions.formatPrice(item.price)} руб.
+                            </div>
+                            <div class="favorite-item-stock ${item.inStock ? 'in-stock' : 'out-of-stock'}">
+                                ${item.inStock ? '✓ В наличии' : 'Нет в наличии'}
+                            </div>
+                        </div>
+                        <div class="favorite-item-actions">
+                            <button class="btn ${isInCart ? 'btn-outline' : ''} ${!item.inStock ? 'disabled' : ''}" 
+                                    data-id="${item.id}" ${!item.inStock ? 'disabled' : ''}>
+                                ${isInCart ? `<i class="fas fa-check"></i> В корзине (${cartQuantity})` : 
+                                  item.inStock ? '<i class="fas fa-cart-plus"></i> В корзину' : '<i class="fas fa-ban"></i> Нет в наличии'}
+                            </button>
+                            <button class="remove-favorite-btn" data-id="${item.id}">
+                                <i class="fas fa-trash"></i> Удалить
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            // Генерируем HTML для действий с избранным
+            const favoritesActionsHTML = `
+                <div class="favorites-actions-header">
+                    <button class="clear-favorites-btn" id="clearFavoritesBtn">
+                        <i class="fas fa-trash-alt"></i> Очистить избранное
+                    </button>
+                    <a href="catalog.html" class="continue-shopping" id="continueShoppingBtn">
+                        <i class="fas fa-arrow-left"></i> Продолжить покупки
+                    </a>
+                </div>
+            `;
+            
+            // Рассчитываем статистику
+            const stats = calculateFavoritesStats();
+            
+            // Генерируем HTML для боковой панели
+            const favoritesSidebarHTML = `
+                <div class="favorites-sidebar">
+                    <h3 class="sidebar-title">Статистика</h3>
+                    <div class="favorites-stats">
+                        <div class="stat-item">
+                            <span>Товаров в избранном:</span>
+                            <span>${stats.totalItems}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span>Из них в наличии:</span>
+                            <span>${stats.inStock}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span>Со скидкой:</span>
+                            <span>${stats.onSale}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span>Общая стоимость:</span>
+                            <span>${CommonFunctions.formatPrice(stats.totalPrice)} руб.</span>
+                        </div>
+                        <div class="stat-item total">
+                            <span>Средняя цена:</span>
+                            <span>${CommonFunctions.formatPrice(stats.averagePrice)} руб.</span>
+                        </div>
+                    </div>
+                    
+                    <div class="favorites-actions">
+                        <button class="btn" id="addAllToCartBtn" ${stats.inStock === 0 ? 'disabled' : ''}>
+                            <i class="fas fa-cart-plus"></i> Добавить все в корзину
+                        </button>
+                        <a href="catalog.html" class="btn btn-secondary">
+                            <i class="fas fa-shopping-bag"></i> Перейти в каталог
+                        </a>
+                    </div>
+                    
+                    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--gray);">
+                        <p style="font-size: 0.9rem; color: var(--text-light); line-height: 1.6;">
+                            <i class="fas fa-info-circle" style="color: var(--accent); margin-right: 8px;"></i>
+                            Товары в избранном сохраняются в вашем браузере. Для синхронизации между устройствами рекомендуется создать аккаунт.
+                        </p>
+                    </div>
+                </div>
+            `;
+            
+            // Обновляем содержимое
+            favoritesContent.innerHTML = `
+                <div class="favorites-items">
+                    ${favoritesActionsHTML}
+                    ${favoritesItemsHTML}
+                </div>
+                ${favoritesSidebarHTML}
+            `;
+            
+            // Добавляем обработчики событий для динамических элементов
+            addFavoritesEventListeners();
+            
+            // Обновляем счетчики в шапке
+            CommonFunctions.updateHeaderCounters();
+        }
+
+        // Добавление обработчиков событий для товаров в избранном
+        function addFavoritesEventListeners() {
+            // Кнопки добавления в корзину
+            document.querySelectorAll('.favorite-item-actions .btn:not(.disabled)').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const productId = parseInt(this.getAttribute('data-id'));
+                    const cart = StorageManager.getCart();
+                    const cartItem = cart.find(item => item.id === productId);
+                    
+                    if (cartItem) {
+                        // Если уже в корзине, удалить
+                        StorageManager.removeFromCart(productId);
+                        this.innerHTML = '<i class="fas fa-cart-plus"></i> В корзину';
+                        this.classList.remove('btn-outline');
+                        CommonFunctions.showNotification('Товар удален из корзины', 'info');
+                    } else {
+                        // Добавить в корзину
+                        StorageManager.addToCart(productId, 1);
+                        this.innerHTML = '<i class="fas fa-check"></i> В корзине (1)';
+                        this.classList.add('btn-outline');
+                        CommonFunctions.showNotification('Товар добавлен в корзину');
+                    }
+                    
+                    // Обновляем счетчики
+                    CommonFunctions.updateHeaderCounters();
+                    
+                    // Перерисовываем избранное (для обновления статуса кнопок)
+                    setTimeout(() => {
+                        loadFavorites();
+                        renderFavorites();
+                    }, 100);
+                });
+            });
+            
+            // Кнопки удаления из избранного
+            document.querySelectorAll('.remove-favorite-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const productId = parseInt(this.getAttribute('data-id'));
+                    const favoriteItem = document.querySelector(`.favorite-item[data-id="${productId}"]`);
+                    
+                    // Анимация удаления
+                    if (favoriteItem) {
+                        favoriteItem.classList.add('removing');
+                        
+                        setTimeout(() => {
+                            removeFavoriteItem(productId);
+                        }, 300);
+                    } else {
+                        removeFavoriteItem(productId);
+                    }
+                });
+            });
+            
+            // Кнопка "Добавить все в корзину"
+            const addAllToCartBtn = document.getElementById('addAllToCartBtn');
+            if (addAllToCartBtn) {
+                addAllToCartBtn.addEventListener('click', addAllToCart);
+            }
+            
+            // Обработчики для динамически созданных элементов
+            const clearFavoritesBtn = document.getElementById('clearFavoritesBtn');
+            if (clearFavoritesBtn) {
+                clearFavoritesBtn.addEventListener('click', clearFavorites);
+            }
+            
+            const continueShoppingBtn = document.getElementById('continueShoppingBtn');
+            if (continueShoppingBtn) {
+                continueShoppingBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.location.href = 'catalog.html';
+                });
+            }
+        }
+
+        // Удаление товара из избранного
+        function removeFavoriteItem(productId) {
+            // Удаляем из массива
+            favoriteItems = favoriteItems.filter(item => item.id !== productId);
+            
+            // Удаляем из localStorage
+            StorageManager.removeFromFavorites(productId);
+            
+            // Перерисовываем избранное
+            renderFavorites();
+            CommonFunctions.showNotification('Товар удален из избранного', 'info');
+        }
+
+        // Очистка всего избранного
+        function clearFavorites() {
+            if (favoriteItems.length === 0) return;
+            
+            if (confirm('Вы уверены, что хотите очистить избранное? Все товары будут удалены.')) {
+                // Очищаем массив
+                favoriteItems = [];
+                
+                // Очищаем localStorage
+                const favorites = StorageManager.getFavorites();
+                favorites.forEach(productId => {
+                    StorageManager.removeFromFavorites(productId);
+                });
+                
+                // Перерисовываем избранное
+                renderFavorites();
+                CommonFunctions.showNotification('Избранное очищено', 'info');
+            }
+        }
+
+        // Добавление всех товаров в корзину
+        function addAllToCart() {
+            // Фильтруем только товары в наличии
+            const availableItems = favoriteItems.filter(item => item.inStock);
+            
+            if (availableItems.length === 0) {
+                CommonFunctions.showNotification('Нет товаров в наличии для добавления в корзину', 'warning');
+                return;
+            }
+            
+            let addedCount = 0;
+            
+            availableItems.forEach(item => {
+                const cart = StorageManager.getCart();
+                const cartItem = cart.find(cartItem => cartItem.id === item.id);
+                
+                if (!cartItem) {
+                    StorageManager.addToCart(item.id, 1);
+                    addedCount++;
+                }
+            });
+            
+            if (addedCount > 0) {
+                CommonFunctions.showNotification(`${addedCount} товар(ов) добавлено в корзину`, 'success');
+                
+                // Обновляем счетчики
+                CommonFunctions.updateHeaderCounters();
+                
+                // Перерисовываем избранное (для обновления статуса кнопок)
+                setTimeout(() => {
+                    loadFavorites();
+                    renderFavorites();
+                }, 100);
+            } else {
+                CommonFunctions.showNotification('Все товары уже в корзине', 'info');
+            }
+        }
+
+        // Расчет статистики избранного
+        function calculateFavoritesStats() {
+            const totalItems = favoriteItems.length;
+            const inStock = favoriteItems.filter(item => item.inStock).length;
+            const onSale = favoriteItems.filter(item => item.originalPrice && item.originalPrice > item.price).length;
+            const totalPrice = favoriteItems.reduce((sum, item) => sum + item.price, 0);
+            const averagePrice = totalItems > 0 ? Math.round(totalPrice / totalItems) : 0;
+            
+            return {
+                totalItems,
+                inStock,
+                onSale,
+                totalPrice,
+                averagePrice
+            };
+        }
+
+        // Функция для просмотра товара (заглушка - в реальном проекте здесь будет переход на страницу товара)
+        window.viewProduct = function(productId) {
+            CommonFunctions.showNotification(`Товар #${productId} будет открыт на отдельной странице`, 'info');
+            // В реальном проекте: window.location.href = `product.html?id=${productId}`;
+        };
+    </script>
+</body>
+</html>

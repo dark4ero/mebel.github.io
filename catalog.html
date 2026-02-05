@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Furniture | Каталог мебели</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="common.css">
+    <style>
+        /* Специфичные стили для страницы каталога */
+        .catalog-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .catalog-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .catalog-filters {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 40px;
+            background-color: white;
+            padding: 25px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            flex-wrap: wrap;
+        }
+        
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .filter-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+        
+        .filter-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .filter-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+        
+        .filter-checkbox input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        .filter-checkbox span {
+            font-size: 0.95rem;
+            color: var(--text);
+        }
+        
+        .price-range {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .price-input {
+            width: 100px;
+            padding: 10px;
+            border: 1px solid var(--gray);
+            border-radius: var(--radius);
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .catalog-content {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 40px;
+        }
+        
+        .sidebar {
+            background-color: white;
+            padding: 25px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+        
+        .sidebar-title {
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            color: var(--primary);
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--gray);
+        }
+        
+        .mobile-filters-btn {
+            display: none;
+            background: linear-gradient(135deg, var(--accent), var(--primary));
+            color: white;
+            padding: 12px 24px;
+            border-radius: var(--radius);
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .sort-select {
+            padding: 12px 16px;
+            border: 1px solid var(--gray);
+            border-radius: var(--radius);
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            background-color: white;
+            cursor: pointer;
+            min-width: 200px;
+        }
+        
+        .clear-filters {
+            background: none;
+            border: none;
+            color: var(--accent);
+            cursor: pointer;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 8px;
+            border-radius: 6px;
+            transition: var(--transition);
+        }
+        
+        .clear-filters:hover {
+            background-color: rgba(49, 130, 206, 0.1);
+        }
+        
+        .products-count {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 60px;
+        }
+        
+        .page-btn {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius);
+            border: 1px solid var(--gray);
+            background-color: white;
+            color: var(--text);
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+        
+        .page-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        
+        .page-btn.active {
+            background: linear-gradient(135deg, var(--accent), var(--primary));
+            color: white;
+            border-color: var(--accent);
+        }
+        
+        .page-btn.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .page-btn.disabled:hover {
+            border-color: var(--gray);
+            color: var(--text);
+        }
+        
+        .mobile-sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        
+        .mobile-sidebar {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 90%;
+            max-width: 400px;
+            height: 100%;
+            background-color: white;
+            z-index: 1001;
+            padding: 30px;
+            overflow-y: auto;
+            transition: right 0.3s ease;
+        }
+        
+        .mobile-sidebar.active {
+            right: 0;
+        }
+        
+        .mobile-sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--gray);
+        }
+        
+        .close-sidebar {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text);
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+        
+        .close-sidebar:hover {
+            background-color: var(--gray);
+        }
+        
+        .loader {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .loader.active {
+            display: block;
+        }
+        
+        @media (max-width: 992px) {
+            .catalog-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            .mobile-filters-btn {
+                display: flex;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .catalog-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .catalog-controls {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .sort-select {
+                flex: 1;
+                min-width: auto;
+            }
+            
+            .mobile-sidebar {
+                width: 100%;
+                max-width: 100%;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .catalog-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header>
+        <div class="container header-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-couch"></i>
+                <span>Nexus Furniture</span>
+            </a>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <nav id="mainNav">
+                <a href="index.html" class="nav-link">Главная</a>
+                <a href="catalog.html" class="nav-link active">Каталог</a>
+                <a href="about.html" class="nav-link">О нас</a>
+                <a href="contacts.html" class="nav-link">Контакты</a>
+                <a href="delivery.html" class="nav-link">Доставка</a>
+            </nav>
+            
+            <div class="header-actions">
+                <a href="favorites.html" class="icon-btn">
+                    <i class="fas fa-heart"></i>
+                    <span class="badge" id="favoritesCount">0</span>
+                </a>
+                <a href="cart.html" class="icon-btn">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="badge" id="cartCount">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Основной контент -->
+    <main class="container page-content">
+        <!-- Заголовок каталога -->
+        <div class="catalog-header">
+            <h1 class="section-title">Каталог мебели</h1>
+            
+            <div class="catalog-controls">
+                <button class="mobile-filters-btn" id="mobileFiltersBtn">
+                    <i class="fas fa-filter"></i> Фильтры
+                </button>
+                
+                <select class="sort-select" id="sortSelect">
+                    <option value="default">По умолчанию</option>
+                    <option value="price_asc">Цена: по возрастанию</option>
+                    <option value="price_desc">Цена: по убыванию</option>
+                    <option value="name_asc">Название: А-Я</option>
+                    <option value="name_desc">Название: Я-А</option>
+                    <option value="popular">По популярности</option>
+                    <option value="new">Сначала новинки</option>
+                </select>
+                
+                <button class="clear-filters" id="clearFilters">
+                    <i class="fas fa-times"></i> Сбросить фильтры
+                </button>
+            </div>
+        </div>
+        
+        <div class="catalog-content">
+            <!-- Боковая панель фильтров (десктоп) -->
+            <aside class="sidebar">
+                <h3 class="sidebar-title">Фильтры</h3>
+                
+                <!-- Категории -->
+                <div class="filter-group">
+                    <h4 class="filter-title">Категории</h4>
+                    <div class="filter-options" id="categoryFilters">
+                        <!-- Заполняется через JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="filter-group">
+                    <h4 class="filter-title">Цена, руб.</h4>
+                    <div class="price-range">
+                        <input type="number" id="minPrice" class="price-input" placeholder="0" min="0">
+                        <span>-</span>
+                        <input type="number" id="maxPrice" class="price-input" placeholder="100000" min="0">
+                    </div>
+                </div>
+                
+                <div class="filter-group">
+                    <h4 class="filter-title">Наличие</h4>
+                    <div class="filter-options">
+                        <label class="filter-checkbox">
+                            <input type="checkbox" id="inStockFilter" checked>
+                            <span>Только в наличии</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="filter-group">
+                    <h4 class="filter-title">Метки</h4>
+                    <div class="filter-options">
+                        <label class="filter-checkbox">
+                            <input type="checkbox" id="newFilter">
+                            <span>Новинки</span>
+                        </label>
+                        <label class="filter-checkbox">
+                            <input type="checkbox" id="saleFilter">
+                            <span>Со скидкой</span>
+                        </label>
+                        <label class="filter-checkbox">
+                            <input type="checkbox" id="popularFilter">
+                            <span>Популярные</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px;">
+                    <button class="btn" id="applyFilters" style="width: 100%;">
+                        <i class="fas fa-check"></i> Применить фильтры
+                    </button>
+                </div>
+            </aside>
+            
+            <!-- Основная область с товарами -->
+            <div class="products-container">
+                <div class="products-count" id="productsCount">
+                    Найдено товаров: <span id="productsCountValue">0</span>
+                </div>
+                
+                <!-- Сетка товаров -->
+                <div class="products-grid" id="catalogProductsGrid">
+                    <!-- Товары загружаются через JavaScript -->
+                </div>
+                
+                <!-- Пагинация -->
+                <div class="pagination" id="pagination">
+                    <!-- Заполняется через JavaScript -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Подвал сайта -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Nexus Furniture</h3>
+                    <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 20px; line-height: 1.7;">Современная мебель для вашего дома и офиса. Качество, дизайн и комфорт в каждом изделии.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-vk"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-telegram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Навигация</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html"><i class="fas fa-home"></i> Главная</a></li>
+                        <li><a href="catalog.html"><i class="fas fa-th-large"></i> Каталог</a></li>
+                        <li><a href="about.html"><i class="fas fa-info-circle"></i> О нас</a></li>
+                        <li><a href="contacts.html"><i class="fas fa-address-book"></i> Контакты</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Помощь</h3>
+                    <ul class="footer-links">
+                        <li><a href="delivery.html"><i class="fas fa-truck"></i> Доставка</a></li>
+                        <li><a href="delivery.html"><i class="fas fa-credit-card"></i> Оплата</a></li>
+                        <li><a href="contacts.html"><i class="fas fa-exchange-alt"></i> Возврат</a></li>
+                        <li><a href="contacts.html"><i class="fas fa-shield-alt"></i> Гарантия</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Контакты</h3>
+                    <ul class="footer-links">
+                        <li><a href="tel:+74951234567"><i class="fas fa-phone"></i> +7 (495) 123-45-67</a></li>
+                        <li><a href="mailto:info@nexus-furniture.ru"><i class="fas fa-envelope"></i> info@nexus-furniture.ru</a></li>
+                        <li><i class="fas fa-map-marker-alt"></i> Москва, ул. Дизайнеров, д. 15</li>
+                        <li><i class="fas fa-clock"></i> Пн-Пт: 9:00-21:00, Сб-Вс: 10:00-20:00</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2023 Nexus Furniture. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Мобильная боковая панель фильтров -->
+    <div class="mobile-sidebar-overlay" id="mobileSidebarOverlay"></div>
+    <div class="mobile-sidebar" id="mobileSidebar">
+        <div class="mobile-sidebar-header">
+            <h3>Фильтры</h3>
+            <button class="close-sidebar" id="closeSidebar">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <!-- Категории -->
+        <div class="filter-group">
+            <h4 class="filter-title">Категории</h4>
+            <div class="filter-options" id="mobileCategoryFilters">
+                <!-- Заполняется через JavaScript -->
+            </div>
+        </div>
+        
+        <div class="filter-group">
+            <h4 class="filter-title">Цена, руб.</h4>
+            <div class="price-range">
+                <input type="number" id="mobileMinPrice" class="price-input" placeholder="0" min="0">
+                <span>-</span>
+                <input type="number" id="mobileMaxPrice" class="price-input" placeholder="100000" min="0">
+            </div>
+        </div>
+        
+        <div class="filter-group">
+            <h4 class="filter-title">Наличие</h4>
+            <div class="filter-options">
+                <label class="filter-checkbox">
+                    <input type="checkbox" id="mobileInStockFilter" checked>
+                    <span>Только в наличии</span>
+                </label>
+            </div>
+        </div>
+        
+        <div class="filter-group">
+            <h4 class="filter-title">Метки</h4>
+            <div class="filter-options">
+                <label class="filter-checkbox">
+                    <input type="checkbox" id="mobileNewFilter">
+                    <span>Новинки</span>
+                </label>
+                <label class="filter-checkbox">
+                    <input type="checkbox" id="mobileSaleFilter">
+                    <span>Со скидкой</span>
+                </label>
+                <label class="filter-checkbox">
+                    <input type="checkbox" id="mobilePopularFilter">
+                    <span>Популярные</span>
+                </label>
+            </div>
+        </div>
+        
+        <div style="margin-top: 30px; display: flex; gap: 15px;">
+            <button class="btn" id="mobileApplyFilters" style="flex: 1;">
+                <i class="fas fa-check"></i> Применить
+            </button>
+            <button class="btn btn-secondary" id="mobileClearFilters" style="flex: 1;">
+                <i class="fas fa-times"></i> Сбросить
+            </button>
+        </div>
+    </div>
+
+    <!-- Подключаем общий файл JavaScript -->
+    <script src="common.js"></script>
+    
+    <script>
+        // Данные для каталога (расширенные)
+        const catalogProductsData = [
+            ...productsData, // Берем товары из common.js
+            {
+                id: 9,
+                name: 'Диван угловой "Семейный"',
+                category: 'sofas',
+                price: 64990,
+                originalPrice: 72990,
+                image: 'https://images.unsplash.com/photo-1549187774-b4e9b0445b41?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                badges: ['sale', 'popular'],
+                inStock: true
+            },
+            {
+                id: 10,
+                name: 'Кресло-качалка "Ретро"',
+                category: 'chairs',
+                price: 14990,
+                image: 'https://images.unsplash.com/photo-1581539250439-c96689b516dd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                badges: ['new'],
+                inStock: true
+            },
+            {
+                id: 11,
+                name: 'Журнальный стол со стеклом',
+                category: 'tables',
+                price: 18990,
+                originalPrice: 21990,
+                image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                badges: ['sale'],
+                inStock: false
+            },
+            {
+                id: 12,
+                name: 'Детская кровать "Радуга"',
+                category: 'beds',
+                price: 32990,
+                image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                badges: ['new'],
+                inStock: true
+            },
+            {
+                id: 13,
+                name: 'Книжный шкаф 5-полочный',
+                category: 'wardrobes',
+                price: 24990,
+                image: 'https://images.unsplash.com/photo-1597074866923-dc0589150358?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                badges: ['popular'],
+                inStock: true
+            },
+            {
+                id: 14,
+                name: 'Навесные полки "Модерн"',
+                category: 'shelves',
+                price: 8990,
+                image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                badges: [],
+                inStock: true
+            },
+            {
+                id: 15,
+                name: 'Офисное кресло "Эргономик"',
+                category: 'chairs',
+                price: 15990,
+                originalPrice: 19990,
+                image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                badges: ['sale', 'popular'],
+                inStock: true
+            },
+            {
+                id: 16,
+                name: 'Тумба прикроватная',
+                category: 'wardrobes',
+                price: 11990,
+                image: 'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                badges: ['new'],
+                inStock: true
+            },
+            {
+                id: 17,
+                name: 'Диван-кровать "Компакт"',
+                category: 'sofas',
+                price: 28990,
+                image: 'https://images.unsplash.com/photo-1549187774-b4e9b0445b41?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                badges: [],
+                inStock: true
+            },
+            {
+                id: 18,
+                name: 'Барный стол с подсветкой',
+                category: 'tables',
+                price: 23990,
+                image: 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                badges: ['new'],
+                inStock: false
+            },
+            {
+                id: 19,
+                name: 'Шкаф для прихожей',
+                category: 'wardrobes',
+                price: 31990,
+                originalPrice: 35990,
+                image: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                badges: ['sale'],
+                inStock: true
+            },
+            {
+                id: 20,
+                name: 'Кровать с подъемным механизмом',
+                category: 'beds',
+                price: 54990,
+                image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                badges: ['popular'],
+                inStock: true
+            }
+        ];
+
+        // Настройки пагинации
+        const ITEMS_PER_PAGE = 8;
+        let currentPage = 1;
+        let filteredProducts = [];
+        let activeFilters = {
+            categories: [],
+            minPrice: 0,
+            maxPrice: 100000,
+            inStock: true,
+            new: false,
+            sale: false,
+            popular: false
+        };
+
+        // Инициализация каталога
+        document.addEventListener('DOMContentLoaded', function() {
+            initCatalog();
+            renderCatalogProducts();
+            setupEventListeners();
+        });
+
+        // Инициализация каталога
+        function initCatalog() {
+            // Добавляем поле inStock ко всем товарам из common.js
+            productsData.forEach(product => {
+                if (!product.hasOwnProperty('inStock')) {
+                    product.inStock = true;
+                }
+            });
+
+            // Создаем список категорий
+            const categories = {};
+            catalogProductsData.forEach(product => {
+                if (!categories[product.category]) {
+                    categories[product.category] = {
+                        name: CommonFunctions.getCategoryName(product.category),
+                        count: 0
+                    };
+                }
+                categories[product.category].count++;
+            });
+
+            // Заполняем фильтры категорий
+            const categoryFiltersContainer = document.getElementById('categoryFilters');
+            const mobileCategoryFiltersContainer = document.getElementById('mobileCategoryFilters');
+            
+            let categoryFiltersHTML = '';
+            let mobileCategoryFiltersHTML = '';
+            
+            for (const categoryId in categories) {
+                categoryFiltersHTML += `
+                    <label class="filter-checkbox">
+                        <input type="checkbox" value="${categoryId}" class="category-filter">
+                        <span>${categories[categoryId].name} (${categories[categoryId].count})</span>
+                    </label>
+                `;
+                
+                mobileCategoryFiltersHTML += `
+                    <label class="filter-checkbox">
+                        <input type="checkbox" value="${categoryId}" class="mobile-category-filter">
+                        <span>${categories[categoryId].name} (${categories[categoryId].count})</span>
+                    </label>
+                `;
+            }
+            
+            categoryFiltersContainer.innerHTML = categoryFiltersHTML;
+            mobileCategoryFiltersContainer.innerHTML = mobileCategoryFiltersHTML;
+
+            // Устанавливаем максимальную цену
+            const maxPrice = Math.max(...catalogProductsData.map(p => p.price));
+            document.getElementById('maxPrice').placeholder = maxPrice;
+            document.getElementById('mobileMaxPrice').placeholder = maxPrice;
+            
+            activeFilters.maxPrice = maxPrice;
+        }
+
+        // Настройка обработчиков событий
+        function setupEventListeners() {
+            // Кнопка применения фильтров
+            document.getElementById('applyFilters').addEventListener('click', applyFilters);
+            document.getElementById('mobileApplyFilters').addEventListener('click', applyMobileFilters);
+            
+            // Кнопка сброса фильтров
+            document.getElementById('clearFilters').addEventListener('click', clearFilters);
+            document.getElementById('mobileClearFilters').addEventListener('click', clearFilters);
+            
+            // Сортировка
+            document.getElementById('sortSelect').addEventListener('change', function() {
+                applyFilters();
+            });
+            
+            // Мобильные фильтры
+            document.getElementById('mobileFiltersBtn').addEventListener('click', openMobileSidebar);
+            document.getElementById('closeSidebar').addEventListener('click', closeMobileSidebar);
+            document.getElementById('mobileSidebarOverlay').addEventListener('click', closeMobileSidebar);
+            
+            // Применение фильтров при изменении цен
+            document.getElementById('minPrice').addEventListener('change', applyFilters);
+            document.getElementById('maxPrice').addEventListener('change', applyFilters);
+            document.getElementById('mobileMinPrice').addEventListener('change', applyMobileFilters);
+            document.getElementById('mobileMaxPrice').addEventListener('change', applyMobileFilters);
+            
+            // Применение фильтров при изменении чекбоксов
+            document.getElementById('inStockFilter').addEventListener('change', applyFilters);
+            document.getElementById('newFilter').addEventListener('change', applyFilters);
+            document.getElementById('saleFilter').addEventListener('change', applyFilters);
+            document.getElementById('popularFilter').addEventListener('change', applyFilters);
+        }
+
+        // Открытие мобильной боковой панели
+        function openMobileSidebar() {
+            // Синхронизируем значения фильтров
+            syncMobileFilters();
+            
+            document.getElementById('mobileSidebarOverlay').style.display = 'block';
+            document.getElementById('mobileSidebar').classList.add('active');
+        }
+
+        // Закрытие мобильной боковой панели
+        function closeMobileSidebar() {
+            document.getElementById('mobileSidebarOverlay').style.display = 'none';
+            document.getElementById('mobileSidebar').classList.remove('active');
+        }
+
+        // Синхронизация фильтров между десктопной и мобильной версией
+        function syncMobileFilters() {
+            // Категории
+            document.querySelectorAll('.category-filter').forEach(checkbox => {
+                const mobileCheckbox = document.querySelector(`.mobile-category-filter[value="${checkbox.value}"]`);
+                if (mobileCheckbox) {
+                    mobileCheckbox.checked = checkbox.checked;
+                }
+            });
+            
+            // Цены
+            document.getElementById('mobileMinPrice').value = document.getElementById('minPrice').value;
+            document.getElementById('mobileMaxPrice').value = document.getElementById('maxPrice').value;
+            
+            // Чекбоксы
+            document.getElementById('mobileInStockFilter').checked = document.getElementById('inStockFilter').checked;
+            document.getElementById('mobileNewFilter').checked = document.getElementById('newFilter').checked;
+            document.getElementById('mobileSaleFilter').checked = document.getElementById('saleFilter').checked;
+            document.getElementById('mobilePopularFilter').checked = document.getElementById('popularFilter').checked;
+        }
+
+        // Применение фильтров (десктоп)
+        function applyFilters() {
+            // Собираем активные категории
+            const selectedCategories = [];
+            document.querySelectorAll('.category-filter:checked').forEach(checkbox => {
+                selectedCategories.push(checkbox.value);
+            });
+            
+            // Собираем цены
+            const minPrice = document.getElementById('minPrice').value ? parseInt(document.getElementById('minPrice').value) : 0;
+            const maxPrice = document.getElementById('maxPrice').value ? parseInt(document.getElementById('maxPrice').value) : activeFilters.maxPrice;
+            
+            // Собираем чекбоксы
+            const inStock = document.getElementById('inStockFilter').checked;
+            const newFilter = document.getElementById('newFilter').checked;
+            const saleFilter = document.getElementById('saleFilter').checked;
+            const popularFilter = document.getElementById('popularFilter').checked;
+            
+            // Обновляем активные фильтры
+            activeFilters.categories = selectedCategories;
+            activeFilters.minPrice = minPrice;
+            activeFilters.maxPrice = maxPrice;
+            activeFilters.inStock = inStock;
+            activeFilters.new = newFilter;
+            activeFilters.sale = saleFilter;
+            activeFilters.popular = popularFilter;
+            
+            // Применяем фильтры
+            filterProducts();
+            currentPage = 1;
+            renderCatalogProducts();
+        }
+
+        // Применение фильтров (мобильная версия)
+        function applyMobileFilters() {
+            // Собираем активные категории
+            const selectedCategories = [];
+            document.querySelectorAll('.mobile-category-filter:checked').forEach(checkbox => {
+                selectedCategories.push(checkbox.value);
+            });
+            
+            // Собираем цены
+            const minPrice = document.getElementById('mobileMinPrice').value ? parseInt(document.getElementById('mobileMinPrice').value) : 0;
+            const maxPrice = document.getElementById('mobileMaxPrice').value ? parseInt(document.getElementById('mobileMaxPrice').value) : activeFilters.maxPrice;
+            
+            // Собираем чекбоксы
+            const inStock = document.getElementById('mobileInStockFilter').checked;
+            const newFilter = document.getElementById('mobileNewFilter').checked;
+            const saleFilter = document.getElementById('mobileSaleFilter').checked;
+            const popularFilter = document.getElementById('mobilePopularFilter').checked;
+            
+            // Обновляем активные фильтры
+            activeFilters.categories = selectedCategories;
+            activeFilters.minPrice = minPrice;
+            activeFilters.maxPrice = maxPrice;
+            activeFilters.inStock = inStock;
+            activeFilters.new = newFilter;
+            activeFilters.sale = saleFilter;
+            activeFilters.popular = popularFilter;
+            
+            // Синхронизируем с десктопными фильтрами
+            syncFiltersToDesktop();
+            
+            // Применяем фильтры
+            filterProducts();
+            currentPage = 1;
+            renderCatalogProducts();
+            
+            // Закрываем мобильную панель
+            closeMobileSidebar();
+        }
+
+        // Синхронизация фильтров с десктопной версией
+        function syncFiltersToDesktop() {
+            // Категории
+            document.querySelectorAll('.category-filter').forEach(checkbox => {
+                checkbox.checked = activeFilters.categories.includes(checkbox.value);
+            });
+            
+            // Цены
+            document.getElementById('minPrice').value = activeFilters.minPrice === 0 ? '' : activeFilters.minPrice;
+            document.getElementById('maxPrice').value = activeFilters.maxPrice === activeFilters.maxPrice ? '' : activeFilters.maxPrice;
+            
+            // Чекбоксы
+            document.getElementById('inStockFilter').checked = activeFilters.inStock;
+            document.getElementById('newFilter').checked = activeFilters.new;
+            document.getElementById('saleFilter').checked = activeFilters.sale;
+            document.getElementById('popularFilter').checked = activeFilters.popular;
+        }
+
+        // Сброс всех фильтров
+        function clearFilters() {
+            // Сбрасываем все чекбоксы
+            document.querySelectorAll('.category-filter').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            
+            document.querySelectorAll('.mobile-category-filter').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            
+            // Сбрасываем цены
+            document.getElementById('minPrice').value = '';
+            document.getElementById('maxPrice').value = '';
+            document.getElementById('mobileMinPrice').value = '';
+            document.getElementById('mobileMaxPrice').value = '';
+            
+            // Сбрасываем чекбоксы
+            document.getElementById('inStockFilter').checked = true;
+            document.getElementById('newFilter').checked = false;
+            document.getElementById('saleFilter').checked = false;
+            document.getElementById('popularFilter').checked = false;
+            
+            document.getElementById('mobileInStockFilter').checked = true;
+            document.getElementById('mobileNewFilter').checked = false;
+            document.getElementById('mobileSaleFilter').checked = false;
+            document.getElementById('mobilePopularFilter').checked = false;
+            
+            // Сбрасываем активные фильтры
+            activeFilters = {
+                categories: [],
+                minPrice: 0,
+                maxPrice: Math.max(...catalogProductsData.map(p => p.price)),
+                inStock: true,
+                new: false,
+                sale: false,
+                popular: false
+            };
+            
+            // Сбрасываем сортировку
+            document.getElementById('sortSelect').value = 'default';
+            
+            // Обновляем отображение
+            filterProducts();
+            currentPage = 1;
+            renderCatalogProducts();
+            
+            // Закрываем мобильную панель, если открыта
+            closeMobileSidebar();
+        }
+
+        // Фильтрация товаров
+        function filterProducts() {
+            filteredProducts = catalogProductsData.filter(product => {
+                // Фильтр по категориям
+                if (activeFilters.categories.length > 0 && !activeFilters.categories.includes(product.category)) {
+                    return false;
+                }
+                
+                // Фильтр по цене
+                if (product.price < activeFilters.minPrice || product.price > activeFilters.maxPrice) {
+                    return false;
+                }
+                
+                // Фильтр по наличию
+                if (activeFilters.inStock && !product.inStock) {
+                    return false;
+                }
+                
+                // Фильтр по меткам
+                if (activeFilters.new && !product.badges.includes('new')) {
+                    return false;
+                }
+                
+                if (activeFilters.sale && !product.badges.includes('sale')) {
+                    return false;
+                }
+                
+                if (activeFilters.popular && !product.badges.includes('popular')) {
+                    return false;
+                }
+                
+                return true;
+            });
+            
+            // Применяем сортировку
+            applySorting();
+        }
+
+        // Применение сортировки
+        function applySorting() {
+            const sortValue = document.getElementById('sortSelect').value;
+            
+            switch(sortValue) {
+                case 'price_asc':
+                    filteredProducts.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price_desc':
+                    filteredProducts.sort((a, b) => b.price - a.price);
+                    break;
+                case 'name_asc':
+                    filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+                case 'name_desc':
+                    filteredProducts.sort((a, b) => b.name.localeCompare(a.name));
+                    break;
+                case 'popular':
+                    // Сначала популярные (с меткой popular)
+                    filteredProducts.sort((a, b) => {
+                        const aPopular = a.badges.includes('popular') ? 1 : 0;
+                        const bPopular = b.badges.includes('popular') ? 1 : 0;
+                        return bPopular - aPopular;
+                    });
+                    break;
+                case 'new':
+                    // Сначала новинки (с меткой new)
+                    filteredProducts.sort((a, b) => {
+                        const aNew = a.badges.includes('new') ? 1 : 0;
+                        const bNew = b.badges.includes('new') ? 1 : 0;
+                        return bNew - aNew;
+                    });
+                    break;
+                // default - оставляем как есть
+            }
+        }
+
+        // Отображение товаров в каталоге
+        function renderCatalogProducts() {
+            const catalogProductsGrid = document.getElementById('catalogProductsGrid');
+            const productsCountValue = document.getElementById('productsCountValue');
+            
+            if (!catalogProductsGrid) return;
+            
+            // Обновляем счетчик товаров
+            productsCountValue.textContent = filteredProducts.length;
+            
+            // Если товаров нет
+            if (filteredProducts.length === 0) {
+                catalogProductsGrid.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        <i class="fas fa-search"></i>
+                        <h3>Товары не найдены</h3>
+                        <p>Попробуйте изменить параметры фильтрации или сбросить фильтры</p>
+                        <button class="btn" id="resetFiltersBtn" style="margin-top: 20px;">
+                            <i class="fas fa-times"></i> Сбросить фильтры
+                        </button>
+                    </div>
+                `;
+                
+                document.getElementById('resetFiltersBtn').addEventListener('click', clearFilters);
+                document.getElementById('pagination').innerHTML = '';
+                return;
+            }
+            
+            // Рассчитываем товары для текущей страницы
+            const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+            const endIndex = startIndex + ITEMS_PER_PAGE;
+            const currentProducts = filteredProducts.slice(startIndex, endIndex);
+            
+            let productsHTML = '';
+            
+            currentProducts.forEach(product => {
+                const isFavorite = StorageManager.isFavorite(product.id);
+                const cart = StorageManager.getCart();
+                const cartItem = cart.find(item => item.id === product.id);
+                const isInCart = !!cartItem;
+                const cartQuantity = cartItem ? cartItem.quantity : 0;
+                
+                // Бейджи товара
+                let badgesHTML = '';
+                if (product.badges && product.badges.length > 0) {
+                    badgesHTML = '<div class="product-badges">';
+                    product.badges.forEach(badge => {
+                        let badgeText = '';
+                        switch(badge) {
+                            case 'new': badgeText = 'Новинка'; break;
+                            case 'sale': badgeText = 'Скидка'; break;
+                            case 'popular': badgeText = 'Популярное'; break;
+                        }
+                        badgesHTML += `<span class="product-badge ${badge}">${badgeText}</span>`;
+                    });
+                    badgesHTML += '</div>';
+                }
+                
+                // Иконка отсутствия в наличии
+                let stockBadge = '';
+                if (!product.inStock) {
+                    stockBadge = '<div class="product-badges"><span class="product-badge" style="background-color: var(--text-light);">Нет в наличии</span></div>';
+                }
+                
+                // Цена со скидкой
+                let priceHTML = '';
+                if (product.originalPrice) {
+                    const discount = Math.round((1 - product.price / product.originalPrice) * 100);
+                    priceHTML = `
+                        <div class="current-price">${CommonFunctions.formatPrice(product.price)} руб.</div>
+                        <div class="original-price">${CommonFunctions.formatPrice(product.originalPrice)} руб.</div>
+                        <div class="discount">-${discount}%</div>
+                    `;
+                } else {
+                    priceHTML = `<div class="current-price">${CommonFunctions.formatPrice(product.price)} руб.</div>`;
+                }
+                
+                productsHTML += `
+                    <div class="product-card">
+                        <img src="${product.image}" alt="${product.name}" class="product-image">
+                        ${badgesHTML}
+                        ${stockBadge}
+                        <div class="product-info">
+                            <div class="product-category">${CommonFunctions.getCategoryName(product.category)}</div>
+                            <h3 class="product-name">${product.name}</h3>
+                            <div class="product-price">
+                                ${priceHTML}
+                            </div>
+                            <div class="product-actions">
+                                <button class="btn ${isInCart ? 'btn-outline' : ''} ${!product.inStock ? 'disabled' : ''}" 
+                                        data-id="${product.id}" ${!product.inStock ? 'disabled' : ''}>
+                                    ${isInCart ? `<i class="fas fa-check"></i> В корзине (${cartQuantity})` : 
+                                      product.inStock ? '<i class="fas fa-cart-plus"></i> В корзину' : '<i class="fas fa-ban"></i> Нет в наличии'}
+                                </button>
+                                <button class="favorite-btn ${isFavorite ? 'active' : ''}" data-id="${product.id}">
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            catalogProductsGrid.innerHTML = productsHTML;
+            
+            // Добавляем обработчики событий для кнопок
+            addProductEventListeners();
+            
+            // Отображаем пагинацию
+            renderPagination();
+        }
+
+        // Добавление обработчиков событий для товаров
+        function addProductEventListeners() {
+            // Кнопки "В корзину"
+            document.querySelectorAll('.product-actions .btn:not(.disabled)').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const productId = parseInt(this.getAttribute('data-id'));
+                    const cart = StorageManager.getCart();
+                    const cartItem = cart.find(item => item.id === productId);
+                    
+                    if (cartItem) {
+                        // Если уже в корзине, удалить
+                        StorageManager.removeFromCart(productId);
+                        this.innerHTML = '<i class="fas fa-cart-plus"></i> В корзину';
+                        this.classList.remove('btn-outline');
+                        CommonFunctions.showNotification('Товар удален из корзины', 'info');
+                    } else {
+                        // Добавить в корзину
+                        StorageManager.addToCart(productId, 1);
+                        this.innerHTML = '<i class="fas fa-check"></i> В корзине (1)';
+                        this.classList.add('btn-outline');
+                        CommonFunctions.showNotification('Товар добавлен в корзину');
+                    }
+                    
+                    CommonFunctions.updateHeaderCounters();
+                });
+            });
+            
+            // Кнопки избранного
+            document.querySelectorAll('.favorite-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const productId = parseInt(this.getAttribute('data-id'));
+                    const favorites = StorageManager.toggleFavorite(productId);
+                    
+                    if (favorites.includes(productId)) {
+                        this.classList.add('active');
+                        CommonFunctions.showNotification('Товар добавлен в избранное');
+                    } else {
+                        this.classList.remove('active');
+                        CommonFunctions.showNotification('Товар удален из избранного', 'info');
+                    }
+                    
+                    CommonFunctions.updateHeaderCounters();
+                });
+            });
+        }
+
+        // Отображение пагинации
+        function renderPagination() {
+            const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
+            const paginationContainer = document.getElementById('pagination');
+            
+            if (totalPages <= 1) {
+                paginationContainer.innerHTML = '';
+                return;
+            }
+            
+            let paginationHTML = '';
+            
+            // Кнопка "Назад"
+            paginationHTML += `
+                <button class="page-btn ${currentPage === 1 ? 'disabled' : ''}" 
+                        onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            `;
+            
+            // Номера страниц
+            const maxVisiblePages = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+            
+            // Корректируем startPage, если endPage достиг максимума
+            if (endPage - startPage + 1 < maxVisiblePages) {
+                startPage = Math.max(1, endPage - maxVisiblePages + 1);
+            }
+            
+            for (let i = startPage; i <= endPage; i++) {
+                paginationHTML += `
+                    <button class="page-btn ${currentPage === i ? 'active' : ''}" onclick="changePage(${i})">
+                        ${i}
+                    </button>
+                `;
+            }
+            
+            // Кнопка "Вперед"
+            paginationHTML += `
+                <button class="page-btn ${currentPage === totalPages ? 'disabled' : ''}" 
+                        onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            `;
+            
+            paginationContainer.innerHTML = paginationHTML;
+        }
+
+        // Функция для смены страницы (должна быть доступна глобально)
+        window.changePage = function(page) {
+            if (page < 1 || page > Math.ceil(filteredProducts.length / ITEMS_PER_PAGE)) return;
+            
+            currentPage = page;
+            renderCatalogProducts();
+            
+            // Прокручиваем к началу каталога
+            document.querySelector('.catalog-content').scrollIntoView({ behavior: 'smooth' });
+        };
+    </script>
+</body>
+</html>

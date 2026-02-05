@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Furniture | О нас</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="common.css">
+    <style>
+        /* Специфичные стили для страницы "О нас" */
+        .about-header {
+            margin-bottom: 50px;
+        }
+        
+        .about-intro {
+            background: linear-gradient(135deg, rgba(26, 54, 93, 0.95), rgba(49, 130, 206, 0.9)), url('https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            border-radius: var(--radius);
+            margin-bottom: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .about-intro::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+        }
+        
+        .about-intro h2 {
+            font-size: 3rem;
+            margin-bottom: 25px;
+            font-weight: 800;
+            line-height: 1.2;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .about-intro p {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0.95;
+            line-height: 1.7;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .about-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+        
+        .stat-card {
+            background-color: white;
+            padding: 35px 25px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: var(--transition);
+            border: 1px solid rgba(226, 232, 240, 0.5);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: 10px;
+            line-height: 1;
+        }
+        
+        .stat-label {
+            font-size: 1.1rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .about-mission {
+            background-color: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 50px;
+            margin: 60px 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+        
+        .mission-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: var(--radius);
+        }
+        
+        .mission-content h3 {
+            font-size: 2.2rem;
+            margin-bottom: 25px;
+            color: var(--primary);
+        }
+        
+        .mission-content p {
+            font-size: 1.1rem;
+            color: var(--text);
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+        
+        .values-section {
+            margin: 80px 0;
+        }
+        
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .value-card {
+            background-color: white;
+            padding: 40px 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: var(--transition);
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .value-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+        }
+        
+        .value-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .value-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: rgba(49, 130, 206, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 2.2rem;
+            color: var(--accent);
+        }
+        
+        .value-card h4 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .value-card p {
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+        
+        .timeline-section {
+            margin: 80px 0;
+        }
+        
+        .timeline {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 2px;
+            background-color: var(--gray);
+            transform: translateX(-50%);
+        }
+        
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+        
+        .timeline-item:nth-child(odd) {
+            flex-direction: row;
+        }
+        
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+        
+        .timeline-content {
+            flex: 1;
+            padding: 30px;
+            background-color: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-right: 40px;
+        }
+        
+        .timeline-item:nth-child(even) .timeline-content {
+            margin-left: 40px;
+        }
+        
+        .timeline-year {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--primary));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.3rem;
+            z-index: 2;
+        }
+        
+        .timeline-item:nth-child(odd) .timeline-year {
+            right: -40px;
+        }
+        
+        .timeline-item:nth-child(even) .timeline-year {
+            left: -40px;
+        }
+        
+        .timeline-content h4 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .team-section {
+            margin: 80px 0;
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        
+        .team-member {
+            background-color: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            text-align: center;
+        }
+        
+        .team-member:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .member-photo {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+        
+        .member-info {
+            padding: 25px 20px;
+        }
+        
+        .member-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--primary);
+        }
+        
+        .member-position {
+            color: var(--accent);
+            font-weight: 500;
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+        
+        .member-bio {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        .social-links-team {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 15px;
+        }
+        
+        .social-links-team a {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: rgba(49, 130, 206, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .social-links-team a:hover {
+            background-color: var(--accent);
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        .showroom-section {
+            background-color: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 50px;
+            margin: 80px 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+        
+        .showroom-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: var(--radius);
+        }
+        
+        .showroom-content h3 {
+            font-size: 2.2rem;
+            margin-bottom: 25px;
+            color: var(--primary);
+        }
+        
+        .showroom-content p {
+            font-size: 1.1rem;
+            color: var(--text);
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+        
+        .showroom-info {
+            margin-top: 30px;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            color: var(--text);
+        }
+        
+        .info-item i {
+            color: var(--accent);
+            font-size: 1.2rem;
+            width: 24px;
+        }
+        
+        @media (max-width: 992px) {
+            .about-intro h2 {
+                font-size: 2.5rem;
+            }
+            
+            .about-mission,
+            .showroom-section {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .mission-image,
+            .showroom-image {
+                height: 300px;
+            }
+            
+            .timeline::before {
+                left: 30px;
+            }
+            
+            .timeline-item {
+                flex-direction: row !important;
+                margin-left: 60px;
+            }
+            
+            .timeline-content {
+                margin: 0 !important;
+            }
+            
+            .timeline-year {
+                left: -100px !important;
+                right: auto !important;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .about-intro {
+                padding: 60px 20px;
+            }
+            
+            .about-intro h2 {
+                font-size: 2rem;
+            }
+            
+            .about-intro p {
+                font-size: 1.1rem;
+            }
+            
+            .about-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .stat-number {
+                font-size: 2.8rem;
+            }
+            
+            .values-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .team-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .about-mission,
+            .showroom-section {
+                padding: 30px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .about-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .timeline-item {
+                margin-left: 40px;
+            }
+            
+            .timeline-year {
+                width: 60px;
+                height: 60px;
+                font-size: 1rem;
+                left: -80px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header>
+        <div class="container header-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-couch"></i>
+                <span>Nexus Furniture</span>
+            </a>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <nav id="mainNav">
+                <a href="index.html" class="nav-link">Главная</a>
+                <a href="catalog.html" class="nav-link">Каталог</a>
+                <a href="about.html" class="nav-link active">О нас</a>
+                <a href="contacts.html" class="nav-link">Контакты</a>
+                <a href="delivery.html" class="nav-link">Доставка</a>
+            </nav>
+            
+            <div class="header-actions">
+                <a href="favorites.html" class="icon-btn">
+                    <i class="fas fa-heart"></i>
+                    <span class="badge" id="favoritesCount">0</span>
+                </a>
+                <a href="cart.html" class="icon-btn">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="badge" id="cartCount">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Основной контент -->
+    <main class="container page-content">
+        <!-- Заголовок страницы -->
+        <div class="about-header">
+            <h1 class="section-title">О компании</h1>
+            <p>Узнайте больше о нашей истории, ценностях и команде</p>
+        </div>
+        
+        <!-- Вступление -->
+        <div class="about-intro">
+            <h2>Мы создаем пространство для вашего комфорта</h2>
+            <p>Nexus Furniture - это больше чем просто мебельный магазин. Это команда энтузиастов, дизайнеров и мастеров, которые создают мебель, превращающую дома в уютные пространства для жизни, а офисы - в эффективные рабочие среды.</p>
+        </div>
+        
+        <!-- Статистика -->
+        <div class="about-stats">
+            <div class="stat-card">
+                <div class="stat-number">10+</div>
+                <div class="stat-label">Лет на рынке</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">5000+</div>
+                <div class="stat-label">Довольных клиентов</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">50+</div>
+                <div class="stat-label">Профессионалов в команде</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">100+</div>
+                <div class="stat-label">Городов доставки</div>
+            </div>
+        </div>
+        
+        <!-- Миссия и видение -->
+        <div class="about-mission">
+            <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Наша миссия" class="mission-image">
+            <div class="mission-content">
+                <h3>Наша миссия</h3>
+                <p>Мы стремимся создавать качественную, функциональную и стильную мебель, которая делает жизнь людей комфортнее и красивее. Наша цель - предложить решения, которые сочетают в себе эргономику, долговечность и современный дизайн.</p>
+                <p>Мы верим, что мебель - это не просто предмет интерьера, а важный элемент, формирующий атмосферу дома или офиса, влияющий на настроение и продуктивность.</p>
+                <p>Каждое наше изделие - это результат тщательной работы дизайнеров, инженеров и мастеров, которые вкладывают душу в создание продукции, которой мы гордимся.</p>
+            </div>
+        </div>
+        
+        <!-- Ценности компании -->
+        <div class="values-section">
+            <h2 class="section-title">Наши ценности</h2>
+            <div class="values-grid">
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-medal"></i>
+                    </div>
+                    <h4>Качество</h4>
+                    <p>Мы используем только проверенные материалы от надежных поставщиков и контролируем каждый этап производства. Гарантия на всю продукцию - 5 лет.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h4>Инновации</h4>
+                    <p>Постоянно изучаем тренды в дизайне и эргономике, внедряем новые технологии производства и создаем уникальные решения для наших клиентов.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h4>Забота о клиенте</h4>
+                    <p>Мы ценим каждого клиента и стремимся обеспечить лучший сервис: от консультации дизайнера до профессиональной сборки и послепродажного обслуживания.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h4>Экологичность</h4>
+                    <p>Используем экологически чистые материалы, оптимизируем процессы производства для минимизации отходов и поддерживаем программы переработки.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- История компании -->
+        <div class="timeline-section">
+            <h2 class="section-title">История компании</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h4>Начало пути</h4>
+                        <p>Основание компании Nexus Furniture как небольшой мастерской по производству корпусной мебели на заказ. Первые клиенты - друзья и знакомые.</p>
+                    </div>
+                    <div class="timeline-year">2013</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h4>Первая коллекция</h4>
+                        <p>Запуск первой собственной коллекции диванов и кресел. Открытие первого шоурума в Москве. Формирование команды дизайнеров и конструкторов.</p>
+                    </div>
+                    <div class="timeline-year">2015</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h4>Расширение производства</h4>
+                        <p>Переезд в новый производственный цех площадью 2000 м². Запуск линии по производству мягкой мебели. Начало сотрудничества с дизайнерами интерьеров.</p>
+                    </div>
+                    <div class="timeline-year">2017</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h4>Запуск интернет-магазина</h4>
+                        <p>Старт онлайн-продаж. Разработка собственного сайта и системы доставки по всей России. Расширение ассортимента до 200+ позиций.</p>
+                    </div>
+                    <div class="timeline-year">2019</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h4>Международное признание</h4>
+                        <p>Получение премии "Лучший мебельный бренд года". Начало экспорта в страны СНГ. Открытие флагманского шоурума в центре Москвы.</p>
+                    </div>
+                    <div class="timeline-year">2021</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h4>Новые горизонты</h4>
+                        <p>Запуск экологической линии мебели из переработанных материалов. Разработка мобильного приложения. Планы по открытию шоурумов в 5 новых городах.</p>
+                    </div>
+                    <div class="timeline-year">2023</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Команда -->
+        <div class="team-section">
+            <h2 class="section-title">Наша команда</h2>
+            <div class="team-grid">
+                <div class="team-member">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Александр Волков" class="member-photo">
+                    <div class="member-info">
+                        <h4 class="member-name">Александр Волков</h4>
+                        <div class="member-position">Основатель и CEO</div>
+                        <p class="member-bio">Основатель компании, дизайнер с 15-летним опытом работы в мебельной индустрии. Автор многих коллекций Nexus Furniture.</p>
+                        <div class="social-links-team">
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fab fa-telegram"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-member">
+                    <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w-800&q=80" alt="Екатерина Смирнова" class="member-photo">
+                    <div class="member-info">
+                        <h4 class="member-name">Екатерина Смирнова</h4>
+                        <div class="member-position">Главный дизайнер</div>
+                        <p class="member-bio">Выпускница Британской высшей школы дизайна. Автор концепции "умной мебели" и экологической линейки продукции.</p>
+                        <div class="social-links-team">
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-behance"></i></a>
+                            <a href="#"><i class="fab fa-pinterest"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-member">
+                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Дмитрий Иванов" class="member-photo">
+                    <div class="member-info">
+                        <h4 class="member-name">Дмитрий Иванов</h4>
+                        <div class="member-position">Технический директор</div>
+                        <p class="member-bio">Инженер-конструктор с опытом работы на европейских мебельных производствах. Отвечает за качество и технологичность продукции.</p>
+                        <div class="social-links-team">
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fab fa-github"></i></a>
+                            <a href="#"><i class="fab fa-telegram"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-member">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Мария Петрова" class="member-photo">
+                    <div class="member-info">
+                        <h4 class="member-name">Мария Петрова</h4>
+                        <div class="member-position">Директор по клиентскому сервису</div>
+                        <p class="member-bio">Специалист в области клиентского сервиса с 10-летним опытом. Курирует службу доставки и гарантийного обслуживания.</p>
+                        <div class="social-links-team">
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-facebook"></i></a>
+                            <a href="#"><i class="fab fa-vk"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Шоурум -->
+        <div class="showroom-section">
+            <div class="showroom-content">
+                <h3>Посетите наш шоурум</h3>
+                <p>Приглашаем вас посетить наш флагманский шоурум в центре Москвы. Здесь вы можете не только увидеть мебель вживую, но и получить консультацию наших дизайнеров.</p>
+                <p>В шоуруме представлены все коллекции Nexus Furniture в специально оформленных интерьерных зонах. Вы можете оценить качество материалов, удобство мебели и найти вдохновение для оформления своего пространства.</p>
+                
+                <div class="showroom-info">
+                    <div class="info-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Москва, ул. Дизайнеров, д. 15</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-clock"></i>
+                        <span>Пн-Пт: 9:00-21:00, Сб-Вс: 10:00-20:00</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-phone"></i>
+                        <span>+7 (495) 123-45-67</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-car"></i>
+                        <span>Бесплатная парковка для посетителей</span>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px;">
+                    <a href="contacts.html" class="btn">
+                        <i class="fas fa-directions"></i> Как добраться
+                    </a>
+                </div>
+            </div>
+            <img src="https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Наш шоурум" class="showroom-image">
+        </div>
+        
+        <!-- CTA секция -->
+        <div class="cta-section">
+            <h2>Готовы создать свой идеальный интерьер?</h2>
+            <p>Ознакомьтесь с нашими коллекциями или запишитесь на консультацию к нашему дизайнеру для индивидуального проекта.</p>
+            <div class="cta-buttons">
+                <a href="catalog.html" class="btn">
+                    <i class="fas fa-shopping-cart"></i> Перейти в каталог
+                </a>
+                <a href="contacts.html" class="btn btn-secondary">
+                    <i class="fas fa-phone-alt"></i> Записаться на консультацию
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Подвал сайта -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Nexus Furniture</h3>
+                    <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 20px; line-height: 1.7;">Современная мебель для вашего дома и офиса. Качество, дизайн и комфорт в каждом изделии.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-vk"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-telegram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Навигация</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html"><i class="fas fa-home"></i> Главная</a></li>
+                        <li><a href="catalog.html"><i class="fas fa-th-large"></i> Каталог</a></li>
+                        <li><a href="about.html"><i class="fas fa-info-circle"></i> О нас</a></li>
+                        <li><a href="contacts.html"><i class="fas fa-address-book"></i> Контакты</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Помощь</h3>
+                    <ul class="footer-links">
+                        <li><a href="delivery.html"><i class="fas fa-truck"></i> Доставка</a></li>
+                        <li><a href="delivery.html"><i class="fas fa-credit-card"></i> Оплата</a></li>
+                        <li><a href="contacts.html"><i class="fas fa-exchange-alt"></i> Возврат</a></li>
+                        <li><a href="contacts.html"><i class="fas fa-shield-alt"></i> Гарантия</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Контакты</h3>
+                    <ul class="footer-links">
+                        <li><a href="tel:+74951234567"><i class="fas fa-phone"></i> +7 (495) 123-45-67</a></li>
+                        <li><a href="mailto:info@nexus-furniture.ru"><i class="fas fa-envelope"></i> info@nexus-furniture.ru</a></li>
+                        <li><i class="fas fa-map-marker-alt"></i> Москва, ул. Дизайнеров, д. 15</li>
+                        <li><i class="fas fa-clock"></i> Пн-Пт: 9:00-21:00, Сб-Вс: 10:00-20:00</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2023 Nexus Furniture. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Подключаем общий файл JavaScript -->
+    <script src="common.js"></script>
+</body>
+</html>

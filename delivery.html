@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Furniture | Доставка и оплата</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="common.css">
+    <style>
+        /* Специфичные стили для страницы доставки и оплаты */
+        .delivery-header {
+            margin-bottom: 50px;
+        }
+        
+        .delivery-intro {
+            background: linear-gradient(135deg, rgba(26, 54, 93, 0.95), rgba(49, 130, 206, 0.9)), url('https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            border-radius: var(--radius);
+            margin-bottom: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .delivery-intro::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+        }
+        
+        .delivery-intro h2 {
+            font-size: 3rem;
+            margin-bottom: 25px;
+            font-weight: 800;
+            line-height: 1.2;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .delivery-intro p {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0.95;
+            line-height: 1.7;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .delivery-steps {
+            margin-bottom: 80px;
+        }
+        
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .step-card {
+            background-color: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            transition: var(--transition);
+            border: 1px solid rgba(226, 232, 240, 0.5);
+        }
+        
+        .step-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .step-number {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--primary));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.5rem;
+            box-shadow: 0 5px 15px rgba(49, 130, 206, 0.3);
+        }
+        
+        .step-icon {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 25px;
+        }
+        
+        .step-card h4 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .step-card p {
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+        
+        .delivery-options-section {
+            margin-bottom: 80px;
+        }
+        
+        .delivery-options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .delivery-option-card {
+            background-color: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 35px;
+            transition: var(--transition);
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .delivery-option-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .delivery-option-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+        }
+        
+        .delivery-option-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .delivery-option-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .delivery-option-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .delivery-option-price.free {
+            color: var(--success);
+        }
+        
+        .delivery-option-details {
+            margin-bottom: 25px;
+        }
+        
+        .delivery-detail {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            color: var(--text);
+        }
+        
+        .delivery-detail i {
+            color: var(--accent);
+            width: 20px;
+        }
+        
+        .delivery-option-note {
+            background-color: rgba(49, 130, 206, 0.05);
+            border-radius: var(--radius);
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+        
+        .payment-methods-section {
+            margin-bottom: 80px;
+        }
+        
+        .payment-methods-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .payment-method-card {
+            background-color: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 35px 30px;
+            text-align: center;
+            transition: var(--transition);
+            border: 1px solid rgba(226, 232, 240, 0.5);
+        }
+        
+        .payment-method-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .payment-method-icon {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 25px;
+        }
+        
+        .payment-method-card h4 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .payment-method-card p {
+            color: var(--text-light);
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+        
+        .payment-method-note {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-style: italic;
+        }
+        
+        .delivery-zones {
+            margin-bottom: 80px;
+        }
+        
+        .zones-table {
+            background-color: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-top: 40px;
+        }
+        
+        .zones-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .zones-table th {
+            background-color: var(--primary);
+            color: white;
+            padding: 20px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .zones-table td {
+            padding: 20px;
+            border-bottom: 1px solid var(--gray);
+        }
+        
+        .zones-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .zones-table tr:nth-child(even) {
+            background-color: rgba(247, 250, 252, 0.5);
+        }
+        
+        .zone-name {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .zone-price {
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .zone-price.free {
+            color: var(--success);
+        }
+        
+        .zone-terms {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .returns-section {
+            margin-bottom: 80px;
+        }
+        
+        .returns-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .return-card {
+            background-color: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 35px;
+            transition: var(--transition);
+        }
+        
+        .return-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .return-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .return-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: rgba(49, 130, 206, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: var(--accent);
+            flex-shrink: 0;
+        }
+        
+        .return-card h4 {
+            font-size: 1.4rem;
+            color: var(--primary);
+        }
+        
+        .return-card p {
+            color: var(--text-light);
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+        
+        .return-terms {
+            background-color: rgba(247, 250, 252, 0.5);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .return-terms h5 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .return-terms ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .return-terms li {
+            margin-bottom: 8px;
+            color: var(--text);
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        
+        .return-terms li i {
+            color: var(--accent);
+            margin-top: 3px;
+        }
+        
+        .faq-delivery-section {
+            margin-bottom: 80px;
+        }
+        
+        .faq-delivery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .faq-delivery-item {
+            background-color: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 30px;
+            transition: var(--transition);
+        }
+        
+        .faq-delivery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .faq-delivery-question {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .faq-delivery-question i {
+            color: var(--accent);
+        }
+        
+        .faq-delivery-answer {
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+        
+        .important-info {
+            background-color: rgba(49, 130, 206, 0.05);
+            border-radius: var(--radius);
+            padding: 30px;
+            margin-bottom: 80px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .important-info h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .important-info p {
+            color: var(--text);
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+        
+        .info-list {
+            list-style-type: none;
+            padding-left: 0;
+            margin-top: 20px;
+        }
+        
+        .info-list li {
+            margin-bottom: 12px;
+            color: var(--text);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        
+        .info-list li i {
+            color: var(--accent);
+            margin-top: 3px;
+        }
+        
+        @media (max-width: 992px) {
+            .delivery-intro h2 {
+                font-size: 2.5rem;
+            }
+            
+            .zones-table {
+                overflow-x: auto;
+            }
+            
+            .zones-table table {
+                min-width: 700px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .delivery-intro {
+                padding: 60px 20px;
+            }
+            
+            .delivery-intro h2 {
+                font-size: 2rem;
+            }
+            
+            .delivery-intro p {
+                font-size: 1.1rem;
+            }
+            
+            .steps-container,
+            .delivery-options-grid,
+            .payment-methods-grid,
+            .returns-grid,
+            .faq-delivery-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .delivery-option-card,
+            .return-card,
+            .faq-delivery-item {
+                padding: 25px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .delivery-option-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .step-card,
+            .payment-method-card {
+                padding: 30px 20px;
+            }
+            
+            .important-info {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header>
+        <div class="container header-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-couch"></i>
+                <span>Nexus Furniture</span>
+            </a>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <nav id="mainNav">
+                <a href="index.html" class="nav-link">Главная</a>
+                <a href="catalog.html" class="nav-link">Каталог</a>
+                <a href="about.html" class="nav-link">О нас</a>
+                <a href="contacts.html" class="nav-link">Контакты</a>
+                <a href="delivery.html" class="nav-link active">Доставка</a>
+            </nav>
+            
+            <div class="header-actions">
+                <a href="favorites.html" class="icon-btn">
+                    <i class="fas fa-heart"></i>
+                    <span class="badge" id="favoritesCount">0</span>
+                </a>
+                <a href="cart.html" class="icon-btn">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="badge" id="cartCount">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Основной контент -->
+    <main class="container page-content">
+        <!-- Заголовок страницы -->
+        <div class="delivery-header">
+            <h1 class="section-title">Доставка и оплата</h1>
+            <p>Вся информация о доставке, оплате и возврате товаров</p>
+        </div>
+        
+        <!-- Вступление -->
+        <div class="delivery-intro">
+            <h2>Быстро, надежно, удобно</h2>
+            <p>Мы предлагаем несколько вариантов доставки по всей России и различные способы оплаты для вашего удобства</p>
+        </div>
+        
+        <!-- Этапы заказа -->
+        <div class="delivery-steps">
+            <h2 class="section-title">Как сделать заказ</h2>
+            <div class="steps-container">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <div class="step-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <h4>Выбор товара</h4>
+                    <p>Выберите понравившиеся товары в каталоге и добавьте их в корзину. Вы можете отложить товары в избранное для сравнения.</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <div class="step-icon">
+                        <i class="fas fa-file-invoice"></i>
+                    </div>
+                    <h4>Оформление заказа</h4>
+                    <p>Перейдите в корзину, проверьте состав заказа и заполните форму с вашими контактными данными и адресом доставки.</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <div class="step-icon">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                    <h4>Доставка</h4>
+                    <p>Выберите удобный способ доставки. Мы доставим заказ в согласованные сроки. Вы можете отслеживать статус доставки.</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <div class="step-icon">
+                        <i class="fas fa-box-open"></i>
+                    </div>
+                    <h4>Получение и оплата</h4>
+                    <p>Получите заказ, проверьте комплектацию и оплатите удобным способом. Наши специалисты могут собрать мебель на месте.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Варианты доставки -->
+        <div class="delivery-options-section">
+            <h2 class="section-title">Варианты доставки</h2>
+            <div class="delivery-options-grid">
+                <div class="delivery-option-card">
+                    <div class="delivery-option-header">
+                        <h3 class="delivery-option-title">Курьерская доставка</h3>
+                        <div class="delivery-option-price">500 руб.</div>
+                    </div>
+                    <div class="delivery-option-details">
+                        <div class="delivery-detail">
+                            <i class="fas fa-clock"></i>
+                            <span>Срок: 1-3 рабочих дня</span>
+                        </div>
+                        <div class="delivery-detail">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Доставка до двери</span>
+                        </div>
+                        <div class="delivery-detail">
+                            <i class="fas fa-box"></i>
+                            <span>Бесплатная сборка при заказе от 30 000 руб.</span>
+                        </div>
+                        <div class="delivery-detail">
+                            <i class="fas fa-phone"></i>
+                            <span>Согласование времени доставки</span>
+                        </div>
+                    </div>
+                    <p>Курьер доставит заказ прямо к вашей двери в удобное для вас время. При заказе на сумму от 20 000 руб. доставка бесплатная.</p>
+                    <div class="delivery-option-note">
+                        <i class="fas fa-info-circle"></i> Подъем на этаж осуществляется бесплатно при наличии лифта. При отсутствии лифта - 100 руб./этаж.
+                    </div>
+                </div>
+                
+                <div class="delivery-option-card">
+                    <div class="delivery-option-header">
+                        <h3 class="delivery-option-title">Самовывоз</h3>
+                        <div class="delivery-option-price free">Бесплатно</div>
+                    </div>
+                    <div class="delivery-option-details">
+                        <div class="delivery-detail">
+                            <i class="fas fa-clock"></i>
+                            <span>Срок: 1-2 рабочих дня</span>
+                        </div>
+                        <div class="delivery-detail">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Москва, ул. Дизайнеров, д. 15</span>
+                        </div>
+                        <div class="delivery-detail">
+                            <i class="fas fa-warehouse"></i>
+                            <span>Пункт выдачи заказов</span>
+                        </div>
+                        <div class="delivery-detail">
+                            <i class="fas fa-parking"></i>
+                            <span>Бесплатная парковка</span>
+                        </div>
+                    </div>
+                    <p>Вы можете самостоятельно забрать заказ из нашего шоурума. Заказ будет подготовлен к выдаче в течение 1-2 рабочих дней после оформления.</p>
+                    <div class="delivery-option-note">
+                        <i class="fas fa-info-circle"></i> При себе необходимо иметь документ, удостоверяющий личность, и номер заказа.
+                    </div>
+                </div>
+                
+                <div class="delivery-option-card">
+                    <div class="delivery-option-header">
+                        <h3 class="delivery-option-title">Доставка по России</h3>
+                        <div class="delivery-option-price">от 1500 руб.</div>
+                    </div>
+                    <div class="delivery-option-details">
+                        <div class="delivery-detail">
+                            <i class="fas fa-clock"></i>
+                            <span>Срок: 5-14 рабочих дней</span>
+                        </div>
+                        <div class="delivery-detail">
+                            <i class="fas fa-truck-loading"></i>
+                            <span>Транспортными компаниями</span>
+                        </div>
+                        <div class="delivery-detail">
+                            <i class="fas fa-ruble-sign"></i>
+                            <span>Расчет стоимости при оформлении</span>
+                        </div>
+                        <div class="delivery-detail">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Страхование груза</span>
+                        </div>
+                    </div>
+                    <p>Доставка в регионы России осуществляется через проверенных транспортных компаний. Стоимость зависит от города и веса заказа.</p>
+                    <div class="delivery-option-note">
+                        <i class="fas fa-info-circle"></i> Сборка мебели в регионах осуществляется партнерскими службами. Стоимость уточняйте при оформлении.
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Способы оплаты -->
+        <div class="payment-methods-section">
+            <h2 class="section-title">Способы оплаты</h2>
+            <div class="payment-methods-grid">
+                <div class="payment-method-card">
+                    <div class="payment-method-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <h4>Наличными</h4>
+                    <p>Оплата наличными при получении заказа курьеру или в пункте самовывоза. Выдаем кассовый чек и товарную накладную.</p>
+                    <div class="payment-method-note">Доступно для заказов до 100 000 рублей</div>
+                </div>
+                
+                <div class="payment-method-card">
+                    <div class="payment-method-icon">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <h4>Банковской картой</h4>
+                    <p>Оплата картой Visa, MasterCard, МИР онлайн или при получении. Безопасные платежи через защищенное соединение.</p>
+                    <div class="payment-method-note">Мгновенное подтверждение оплаты</div>
+                </div>
+                
+                <div class="payment-method-card">
+                    <div class="payment-method-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h4>Онлайн-платежи</h4>
+                    <p>Оплата через СБП, Яндекс.Деньги, QIWI, WebMoney и другие электронные платежные системы. Мгновенное зачисление.</p>
+                    <div class="payment-method-note">Доступно 24/7</div>
+                </div>
+                
+                <div class="payment-method-card">
+                    <div class="payment-method-icon">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                    </div>
+                    <h4>Безналичный расчет</h4>
+                    <p>Для юридических лиц и ИП. Оформление счета, договора и всех необходимых документов. Работаем с НДС и без НДС.</p>
+                    <div class="payment-method-note">Отсрочка платежа для постоянных клиентов</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Зоны доставки -->
+        <div class="delivery-zones">
+            <h2 class="section-title">Зоны и стоимость доставки по Москве</h2>
+            <div class="zones-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Зона доставки</th>
+                            <th>Стоимость</th>
+                            <th>Срок доставки</th>
+                            <th>Условия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="zone-name">В пределах МКАД</td>
+                            <td class="zone-price">500 руб.</td>
+                            <td>1-2 дня</td>
+                            <td class="zone-terms">Бесплатно при заказе от 20 000 руб.</td>
+                        </tr>
+                        <tr>
+                            <td class="zone-name">За МКАД до 10 км</td>
+                            <td class="zone-price">800 руб.</td>
+                            <td>1-3 дня</td>
+                            <td class="zone-terms">Бесплатно при заказе от 30 000 руб.</td>
+                        </tr>
+                        <tr>
+                            <td class="zone-name">За МКАД 10-30 км</td>
+                            <td class="zone-price">1200 руб.</td>
+                            <td>2-3 дня</td>
+                            <td class="zone-terms">Бесплатно при заказе от 50 000 руб.</td>
+                        </tr>
+                        <tr>
+                            <td class="zone-name">Московская область</td>
+                            <td class="zone-price">от 1500 руб.</td>
+                            <td>3-5 дней</td>
+                            <td class="zone-terms">Расчет индивидуально</td>
+                        </tr>
+                        <tr>
+                            <td class="zone-name">Самовывоз</td>
+                            <td class="zone-price free">Бесплатно</td>
+                            <td>1 день</td>
+                            <td class="zone-terms">Подготовка заказа 1-2 часа</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Возврат и обмен -->
+        <div class="returns-section">
+            <h2 class="section-title">Возврат и обмен товара</h2>
+            <div class="returns-grid">
+                <div class="return-card">
+                    <div class="return-header">
+                        <div class="return-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <h4>Обмен товара</h4>
+                    </div>
+                    <p>Вы можете обменять товар в течение 14 дней с момента покупки, если он не подошел по размеру, цвету или другим параметрам.</p>
+                    <div class="return-terms">
+                        <h5>Условия обмена:</h5>
+                        <ul>
+                            <li><i class="fas fa-check"></i> Товар не был в употреблении</li>
+                            <li><i class="fas fa-check"></i> Сохранен товарный вид и упаковка</li>
+                            <li><i class="fas fa-check"></i> Наличие чека или другого подтверждения покупки</li>
+                            <li><i class="fas fa-check"></i> Отсутствие механических повреждений</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="return-card">
+                    <div class="return-header">
+                        <div class="return-icon">
+                            <i class="fas fa-undo-alt"></i>
+                        </div>
+                        <h4>Возврат товара</h4>
+                    </div>
+                    <p>Возврат товара возможен в течение 7 дней с момента доставки при наличии производственного брака или несоответствия заказу.</p>
+                    <div class="return-terms">
+                        <h5>Условия возврата:</h5>
+                        <ul>
+                            <li><i class="fas fa-check"></i> Обнаружен заводской брак</li>
+                            <li><i class="fas fa-check"></i> Товар не соответствует описанию</li>
+                            <li><i class="fas fa-check"></i> Неполная комплектация</li>
+                            <li><i class="fas fa-check"></i> Повреждения при транспортировке</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Важная информация -->
+        <div class="important-info">
+            <h3><i class="fas fa-exclamation-circle"></i> Важная информация</h3>
+            <p>Обратите внимание на следующие условия доставки и оплаты:</p>
+            <ul class="info-list">
+                <li><i class="fas fa-check"></i> Доставка осуществляется только после 100% предоплаты или подтверждения заказа менеджером</li>
+                <li><i class="fas fa-check"></i> Время доставки согласовывается с менеджером за 1-2 дня до отправки</li>
+                <li><i class="fas fa-check"></i> При получении заказа проверяйте комплектацию и отсутствие повреждений</li>
+                <li><i class="fas fa-check"></i> Для въезда на территорию некоторых ЖК может потребоваться пропуск</li>
+                <li><i class="fas fa-check"></i> Стоимость доставки в отдаленные районы рассчитывается индивидуально</li>
+            </ul>
+        </div>
+        
+        <!-- Часто задаваемые вопросы -->
+        <div class="faq-delivery-section">
+            <h2 class="section-title">Часто задаваемые вопросы</h2>
+            <div class="faq-delivery-grid">
+                <div class="faq-delivery-item">
+                    <div class="faq-delivery-question">
+                        <i class="fas fa-question-circle"></i> Можно ли изменить адрес доставки после оформления заказа?
+                    </div>
+                    <div class="faq-delivery-answer">
+                        Да, вы можете изменить адрес доставки до момента передачи заказа в службу доставки. Для этого свяжитесь с менеджером по телефону или через онлайн-чат.
+                    </div>
+                </div>
+                
+                <div class="faq-delivery-item">
+                    <div class="faq-delivery-question">
+                        <i class="fas fa-question-circle"></i> Что делать, если товар поврежден при доставке?
+                    </div>
+                    <div class="faq-delivery-answer">
+                        В случае обнаружения повреждений при доставке необходимо отказаться от приемки товара и составить акт с курьером. Свяжитесь с нами для организации замены или возврата.
+                    </div>
+                </div>
+                
+                <div class="faq-delivery-item">
+                    <div class="faq-delivery-question">
+                        <i class="fas fa-question-circle"></i> Есть ли доставка в выходные дни?
+                    </div>
+                    <div class="faq-delivery-answer">
+                        Да, мы осуществляем доставку в субботу и воскресенье. Стоимость доставки в выходные дни не увеличивается. Время доставки в выходные: с 10:00 до 18:00.
+                    </div>
+                </div>
+                
+                <div class="faq-delivery-item">
+                    <div class="faq-delivery-question">
+                        <i class="fas fa-question-circle"></i> Как отследить статус доставки?
+                    </div>
+                    <div class="faq-delivery-answer">
+                        После передачи заказа в службу доставки мы высылаем вам трек-номер для отслеживания. Также вы можете связаться с вашим менеджером для уточнения статуса заказа.
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- CTA секция -->
+        <div class="cta-section">
+            <h2>Остались вопросы по доставке?</h2>
+            <p>Наши менеджеры с радостью ответят на все ваши вопросы и помогут подобрать оптимальный вариант доставки</p>
+            <div class="cta-buttons">
+                <a href="contacts.html" class="btn">
+                    <i class="fas fa-headset"></i> Связаться с нами
+                </a>
+                <a href="catalog.html" class="btn btn-secondary">
+                    <i class="fas fa-shopping-bag"></i> Перейти в каталог
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Подвал сайта -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Nexus Furniture</h3>
+                    <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 20px; line-height: 1.7;">Современная мебель для вашего дома и офиса. Качество, дизайн и комфорт в каждом изделии.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-vk"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-telegram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Навигация</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html"><i class="fas fa-home"></i> Главная</a></li>
+                        <li><a href="catalog.html"><i class="fas fa-th-large"></i> Каталог</a></li>
+                        <li><a href="about.html"><i class="fas fa-info-circle"></i> О нас</a></li>
+                        <li><a href="contacts.html"><i class="fas fa-address-book"></i> Контакты</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Помощь</h3>
+                    <ul class="footer-links">
+                        <li><a href="delivery.html"><i class="fas fa-truck"></i> Доставка</a></li>
+                        <li><a href="delivery.html"><i class="fas fa-credit-card"></i> Оплата</a></li>
+                        <li><a href="contacts.html"><i class="fas fa-exchange-alt"></i> Возврат</a></li>
+                        <li><a href="contacts.html"><i class="fas fa-shield-alt"></i> Гарантия</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Контакты</h3>
+                    <ul class="footer-links">
+                        <li><a href="tel:+74951234567"><i class="fas fa-phone"></i> +7 (495) 123-45-67</a></li>
+                        <li><a href="mailto:info@nexus-furniture.ru"><i class="fas fa-envelope"></i> info@nexus-furniture.ru</a></li>
+                        <li><i class="fas fa-map-marker-alt"></i> Москва, ул. Дизайнеров, д. 15</li>
+                        <li><i class="fas fa-clock"></i> Пн-Пт: 9:00-21:00, Сб-Вс: 10:00-20:00</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2023 Nexus Furniture. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Подключаем общий файл JavaScript -->
+    <script src="common.js"></script>
+</body>
+</html>
