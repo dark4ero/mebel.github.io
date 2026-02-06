@@ -330,6 +330,7 @@
                 <a href="about.html" class="nav-link">О нас</a>
                 <a href="contacts.html" class="nav-link">Контакты</a>
                 <a href="delivery.html" class="nav-link">Доставка</a>
+                <a href="admin.html" class="nav-link">Админка</a>
             </nav>
             
             <div class="header-actions">
@@ -495,7 +496,7 @@
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; 2023 Nexus Furniture. Все права защищены.</p>
+                <p>&copy; 2026 Nexus Furniture. Все права защищены.</p>
             </div>
         </div>
     </footer>
@@ -569,123 +570,6 @@
     <script src="common.js"></script>
     
     <script>
-        // Данные для каталога (расширенные)
-        const catalogProductsData = [
-            ...productsData, // Берем товары из common.js
-            {
-                id: 9,
-                name: 'Диван угловой "Семейный"',
-                category: 'sofas',
-                price: 64990,
-                originalPrice: 72990,
-                image: 'https://images.unsplash.com/photo-1549187774-b4e9b0445b41?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                badges: ['sale', 'popular'],
-                inStock: true
-            },
-            {
-                id: 10,
-                name: 'Кресло-качалка "Ретро"',
-                category: 'chairs',
-                price: 14990,
-                image: 'https://images.unsplash.com/photo-1581539250439-c96689b516dd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                badges: ['new'],
-                inStock: true
-            },
-            {
-                id: 11,
-                name: 'Журнальный стол со стеклом',
-                category: 'tables',
-                price: 18990,
-                originalPrice: 21990,
-                image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                badges: ['sale'],
-                inStock: false
-            },
-            {
-                id: 12,
-                name: 'Детская кровать "Радуга"',
-                category: 'beds',
-                price: 32990,
-                image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                badges: ['new'],
-                inStock: true
-            },
-            {
-                id: 13,
-                name: 'Книжный шкаф 5-полочный',
-                category: 'wardrobes',
-                price: 24990,
-                image: 'https://images.unsplash.com/photo-1597074866923-dc0589150358?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                badges: ['popular'],
-                inStock: true
-            },
-            {
-                id: 14,
-                name: 'Навесные полки "Модерн"',
-                category: 'shelves',
-                price: 8990,
-                image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                badges: [],
-                inStock: true
-            },
-            {
-                id: 15,
-                name: 'Офисное кресло "Эргономик"',
-                category: 'chairs',
-                price: 15990,
-                originalPrice: 19990,
-                image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                badges: ['sale', 'popular'],
-                inStock: true
-            },
-            {
-                id: 16,
-                name: 'Тумба прикроватная',
-                category: 'wardrobes',
-                price: 11990,
-                image: 'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                badges: ['new'],
-                inStock: true
-            },
-            {
-                id: 17,
-                name: 'Диван-кровать "Компакт"',
-                category: 'sofas',
-                price: 28990,
-                image: 'https://images.unsplash.com/photo-1549187774-b4e9b0445b41?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                badges: [],
-                inStock: true
-            },
-            {
-                id: 18,
-                name: 'Барный стол с подсветкой',
-                category: 'tables',
-                price: 23990,
-                image: 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                badges: ['new'],
-                inStock: false
-            },
-            {
-                id: 19,
-                name: 'Шкаф для прихожей',
-                category: 'wardrobes',
-                price: 31990,
-                originalPrice: 35990,
-                image: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                badges: ['sale'],
-                inStock: true
-            },
-            {
-                id: 20,
-                name: 'Кровать с подъемным механизмом',
-                category: 'beds',
-                price: 54990,
-                image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                badges: ['popular'],
-                inStock: true
-            }
-        ];
-
         // Настройки пагинации
         const ITEMS_PER_PAGE = 8;
         let currentPage = 1;
@@ -709,13 +593,8 @@
 
         // Инициализация каталога
         function initCatalog() {
-            // Добавляем поле inStock ко всем товарам из common.js
-            productsData.forEach(product => {
-                if (!product.hasOwnProperty('inStock')) {
-                    product.inStock = true;
-                }
-            });
-
+            const catalogProductsData = StorageManager.getProducts();
+            
             // Создаем список категорий
             const categories = {};
             catalogProductsData.forEach(product => {
@@ -950,6 +829,7 @@
             document.getElementById('mobilePopularFilter').checked = false;
             
             // Сбрасываем активные фильтры
+            const catalogProductsData = StorageManager.getProducts();
             activeFilters = {
                 categories: [],
                 minPrice: 0,
@@ -974,6 +854,7 @@
 
         // Фильтрация товаров
         function filterProducts() {
+            const catalogProductsData = StorageManager.getProducts();
             filteredProducts = catalogProductsData.filter(product => {
                 // Фильтр по категориям
                 if (activeFilters.categories.length > 0 && !activeFilters.categories.includes(product.category)) {
@@ -991,15 +872,15 @@
                 }
                 
                 // Фильтр по меткам
-                if (activeFilters.new && !product.badges.includes('new')) {
+                if (activeFilters.new && (!product.badges || !product.badges.includes('new'))) {
                     return false;
                 }
                 
-                if (activeFilters.sale && !product.badges.includes('sale')) {
+                if (activeFilters.sale && (!product.badges || !product.badges.includes('sale'))) {
                     return false;
                 }
                 
-                if (activeFilters.popular && !product.badges.includes('popular')) {
+                if (activeFilters.popular && (!product.badges || !product.badges.includes('popular'))) {
                     return false;
                 }
                 
@@ -1030,16 +911,16 @@
                 case 'popular':
                     // Сначала популярные (с меткой popular)
                     filteredProducts.sort((a, b) => {
-                        const aPopular = a.badges.includes('popular') ? 1 : 0;
-                        const bPopular = b.badges.includes('popular') ? 1 : 0;
+                        const aPopular = a.badges && a.badges.includes('popular') ? 1 : 0;
+                        const bPopular = b.badges && b.badges.includes('popular') ? 1 : 0;
                         return bPopular - aPopular;
                     });
                     break;
                 case 'new':
                     // Сначала новинки (с меткой new)
                     filteredProducts.sort((a, b) => {
-                        const aNew = a.badges.includes('new') ? 1 : 0;
-                        const bNew = b.badges.includes('new') ? 1 : 0;
+                        const aNew = a.badges && a.badges.includes('new') ? 1 : 0;
+                        const bNew = b.badges && b.badges.includes('new') ? 1 : 0;
                         return bNew - aNew;
                     });
                     break;
